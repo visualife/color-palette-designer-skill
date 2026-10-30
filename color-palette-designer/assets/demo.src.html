@@ -1,0 +1,698 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="dark">
+<title>Color Palette Lab</title>
+<meta name="description" content="Contrast-solved color palettes in OKLCH: WCAG 2.2 and APCA audit, dark-mode rules, area splits, state mixes. By Ailive.fr.">
+<link rel="canonical" href="https://www.ailive.fr/color-palette-designer-skill/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Ailive.fr">
+<meta property="og:title" content="Color Palette Designer: contrast-solved palettes">
+<meta property="og:description" content="OKLCH palettes, WCAG 2.2 + APCA audit, dark-mode rules, area splits and state mixes. 15 verified palettes and a live lab.">
+<meta property="og:url" content="https://www.ailive.fr/color-palette-designer-skill/">
+<meta property="og:image" content="https://www.ailive.fr/color-palette-designer-skill/colorsys.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Color Palette Designer by Ailive.fr: light and dark palette cards with contrast badges">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Color Palette Designer: contrast-solved palettes">
+<meta name="twitter:description" content="OKLCH palettes, WCAG 2.2 + APCA audit, dark-mode rules, area splits and state mixes.">
+<meta name="twitter:image" content="https://www.ailive.fr/color-palette-designer-skill/colorsys.jpg">
+<style>
+:root{
+  /* flat neutral grey shell; blue is desaturated (OKLCH C 0.035) */
+  --sh-bg:#2b2b2b; --sh-panel:#353535; --sh-panel-2:#303030; --sh-border:#4d4d4d; --sh-border-soft:#3f3f3f;
+  --sh-text:#c4c4c4; --sh-strong:#ececec; --sh-mute:#a8a8a8; --sh-accent:#9aaabf; --sh-pressed:#4a5058;
+  --sh-pass:#6dbb70; --sh-fail:#f0736b; --sh-warn:#d4a23a;
+  --mono:ui-monospace,SFMono-Regular,"SF Mono",Menlo,Consolas,monospace;
+  --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Inter,Roboto,Helvetica,Arial,sans-serif;
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--sh-bg);color:var(--sh-text);font:14px/1.5 var(--sans);-webkit-font-smoothing:antialiased}
+h1,h2,h3{color:var(--sh-strong);margin:0;font-weight:600}
+h1{font-size:18px} h2{font-size:15px} h3{font-size:12px;text-transform:uppercase;letter-spacing:.06em;color:var(--sh-mute)}
+code,.mono{font-family:var(--mono);font-size:12px}
+.app{display:grid;grid-template-columns:300px minmax(0,1fr);min-height:100vh}
+aside{background:var(--sh-panel-2);border-right:1px solid var(--sh-border-soft);padding:20px 18px;position:sticky;top:0;height:100vh;overflow:auto}
+main{padding:20px 24px 60px;display:flex;flex-direction:column;gap:20px;min-width:0}
+.field{margin:16px 0}
+.field>label,.field>.lbl,.lbl{display:block;font-size:12px;color:var(--sh-mute);margin-bottom:6px}
+select,button,input{font:inherit;color:var(--sh-strong)}
+select{width:100%;background:var(--sh-panel);border:1px solid var(--sh-border);border-radius:6px;padding:7px 8px}
+:focus-visible{outline:2px solid var(--sh-accent);outline-offset:2px}
+input[type=range]{width:100%;accent-color:var(--sh-accent)}
+.row{display:flex;justify-content:space-between;gap:8px;align-items:center;font-size:12px}
+.row output{font-family:var(--mono);color:var(--sh-strong)}
+.seg{display:flex;flex-wrap:wrap;gap:4px}
+.seg button{background:var(--sh-panel);border:1px solid var(--sh-border);border-radius:6px;padding:5px 9px;cursor:pointer;font-size:12px}
+.seg button:hover:not(:disabled){border-color:var(--sh-accent)}
+.seg button[aria-pressed=true]{background:var(--sh-pressed);border-color:var(--sh-accent);color:#fff}
+.seg button:disabled{opacity:.45;cursor:not-allowed}
+.chk{display:flex;gap:8px;align-items:center;font-size:13px;margin:8px 0}
+.chk input{accent-color:var(--sh-accent)}
+.note{font-size:12px;color:var(--sh-mute)}
+.card{background:var(--sh-panel);border:1px solid var(--sh-border-soft);border-radius:10px;padding:16px}
+.card header{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:12px;flex-wrap:wrap}
+table{border-collapse:collapse;width:100%}
+th{font-size:11px;text-transform:uppercase;letter-spacing:.05em;color:var(--sh-mute);text-align:left;padding:6px 8px;border-bottom:1px solid var(--sh-border)}
+td{padding:6px 8px;border-bottom:1px solid var(--sh-border-soft);vertical-align:middle}
+.chip{display:inline-flex;align-items:center;justify-content:center;width:38px;height:24px;border-radius:5px;border:1px solid #0004;font:600 12px var(--sans)}
+.sw{display:inline-block;width:18px;height:18px;border-radius:4px;border:1px solid #fff3;vertical-align:middle;margin-right:6px}
+.badge{font:600 11px var(--mono);padding:2px 7px;border-radius:99px;display:inline-block}
+.b-AAA,.b-AA{background:#1f3a27;color:#8be598} .b-UI{background:#3d3418;color:#e8bd5f} .b-FAIL{background:#4a2421;color:#ff9a92}
+.ok{color:var(--sh-pass)} .bad{color:var(--sh-fail);font-weight:600}
+pre{margin:0;background:#242424;border:1px solid var(--sh-border-soft);border-radius:8px;padding:12px;overflow:auto;max-height:340px;font:12px/1.5 var(--mono);color:var(--sh-strong)}
+.btn{background:var(--sh-panel);border:1px solid var(--sh-border);border-radius:6px;padding:5px 10px;cursor:pointer;font-size:12px}
+.btn:hover{border-color:var(--sh-accent)}
+.btn:active{background:var(--sh-pressed)}
+.btn[hidden]{display:none}
+.scroll{overflow:auto}
+.ctl{display:flex;gap:12px;flex-wrap:wrap;align-items:flex-end;margin-bottom:12px}
+.ctl label{display:flex;flex-direction:column;gap:4px;font-size:12px;color:var(--sh-mute)}
+.ctl input[type=number]{width:74px;background:var(--sh-panel-2);border:1px solid var(--sh-border);border-radius:6px;padding:6px 8px}
+.stack{display:flex;height:34px;border-radius:8px;overflow:hidden;border:1px solid var(--sh-border);margin:6px 0 4px}
+.stack div{display:flex;align-items:center;justify-content:center;font:600 11px var(--mono);min-width:0}
+.sw-row{display:flex;gap:8px;flex-wrap:wrap;margin:6px 0 14px}
+.sw-row figure{margin:0;text-align:center;font-size:11px;color:var(--sh-mute)}
+.sw-row i{display:block;width:74px;height:40px;border-radius:8px;border:1px solid #fff3;margin-bottom:4px}
+a{color:var(--sh-accent)}
+.credit{margin:10px 0 0;font-size:12px;color:var(--sh-mute)}
+.site-credit{margin-top:8px;padding-top:16px;border-top:1px solid var(--sh-border-soft);font-size:12px;color:var(--sh-mute);text-align:center}
+.frame{border:1px solid var(--sh-border);border-radius:12px;overflow:hidden}
+.frame-bar{display:flex;justify-content:space-between;padding:8px 12px;background:var(--sh-panel);border-bottom:1px solid var(--sh-border);font-size:12px;color:var(--sh-mute);flex-wrap:wrap;gap:6px}
+.lab-row{display:flex;gap:0;border-radius:8px;overflow:hidden;margin:6px 0}
+.lab-row div{flex:1;height:42px}
+.lab-row.tall div{height:54px}
+.gray{filter:grayscale(1)}
+
+/* toolbar above the visual */
+.toolbar{display:flex;gap:16px 22px;flex-wrap:wrap;align-items:flex-end;background:var(--sh-panel);border:1px solid var(--sh-border-soft);border-radius:10px;padding:12px 14px}
+.toolbar .tb-pal{flex:1 1 280px;max-width:420px}
+.toolbar .lbl{margin-bottom:5px}
+.toolbar .note{align-self:center;font-family:var(--mono)}
+
+/* folded sections (closed by default) */
+details.fold>summary{cursor:pointer;color:var(--sh-mute);font-size:12px;padding:6px 0;list-style:none;display:flex;gap:8px;align-items:center;user-select:none}
+details.fold>summary::-webkit-details-marker{display:none}
+details.fold>summary::before{content:"\25B8";display:inline-block;transition:transform .12s;color:var(--sh-accent)}
+details.fold[open]>summary::before{transform:rotate(90deg)}
+details.fold>summary:hover{color:var(--sh-strong)}
+details.fold[open]>summary{margin-bottom:8px}
+details.card.fold>summary{padding:0}
+details.card.fold>summary h2{display:inline}
+
+/* editable roles */
+.ed{display:inline-flex;gap:6px;align-items:center;vertical-align:middle}
+.cp{width:30px;height:24px;padding:0;border:1px solid var(--sh-border);border-radius:5px;background:none;cursor:pointer}
+.hx{width:86px;background:var(--sh-panel-2);border:1px solid var(--sh-border);border-radius:5px;padding:3px 6px;font:12px var(--mono);color:var(--sh-strong)}
+.cpy{background:transparent;border:1px solid var(--sh-border-soft);border-radius:5px;color:var(--sh-mute);font-size:11px;padding:2px 6px;cursor:pointer}
+.cpy:hover{color:var(--sh-strong);border-color:var(--sh-accent)}
+tr.edited td:first-child{box-shadow:inset 3px 0 0 var(--sh-accent)}
+[data-copy]{cursor:copy}
+.cc-sample{border-radius:8px;padding:14px 16px;font:600 20px var(--sans);border:1px solid var(--sh-border);margin:4px 0 10px}
+#toast{position:fixed;right:18px;bottom:18px;background:var(--sh-strong);color:#222;padding:8px 12px;border-radius:8px;font:600 12px var(--sans);opacity:0;transform:translateY(6px);transition:.15s;pointer-events:none;z-index:50}
+#toast.on{opacity:1;transform:none}
+@media (max-width:920px){.app{grid-template-columns:1fr}aside{position:static;height:auto}}
+
+/* ============ Sample UI (consumes only role variables) ============ */
+.pv{--hover:color-mix(in oklab,var(--primary),var(--text) 12%);--active:color-mix(in oklab,var(--primary),var(--text) 20%);--disabled:color-mix(in oklab,var(--primary),var(--bg) 60%);
+  background:var(--bg);color:var(--text);font:15px/1.55 var(--sans);padding:0}
+.pv *{box-sizing:border-box}
+.pv a{color:var(--link);text-decoration:underline;text-underline-offset:3px}
+.pv .nav{display:flex;align-items:center;justify-content:space-between;padding:14px 22px;background:var(--surface);border-bottom:1px solid var(--border);gap:12px;flex-wrap:wrap}
+.pv .brand{font-weight:700;letter-spacing:-.01em;display:flex;align-items:center;gap:8px}
+.pv .logo{width:22px;height:22px;border-radius:6px;background:var(--primary)}
+.pv .links{display:flex;gap:18px;font-size:14px;color:var(--text-muted)}
+.pv .hero{position:relative;padding:44px 22px 36px;overflow:hidden;background:var(--surface-2)}
+.pv .blob{position:absolute;inset:auto -40px -80px auto;width:340px;height:240px;border-radius:50%;opacity:.55;filter:blur(2px);
+  background:linear-gradient(135deg,var(--primary),var(--accent));background:linear-gradient(in oklch 135deg,var(--primary),var(--accent))}
+.pv .hero-in{position:relative;max-width:560px}
+.pv h1{font-size:34px;line-height:1.1;margin:0 0 10px;letter-spacing:-.02em;color:var(--text)}
+.pv .lead{color:var(--text-muted);margin:0 0 18px}
+.pv .actions{display:flex;gap:10px;flex-wrap:wrap}
+.pv .b{font:600 14px var(--sans);border-radius:8px;padding:9px 16px;border:1px solid transparent;cursor:pointer;display:inline-flex;align-items:center;gap:6px}
+.pv .b-p{background:var(--primary);color:var(--on-primary)}
+.pv .b-p:hover,.pv .b-p.is-hover{background:var(--hover)}
+.pv .b-p:active,.pv .b-p.is-active{background:var(--active)}
+.pv .b-s{background:var(--surface);color:var(--text);border-color:var(--border-strong)}
+.pv .b-s:hover,.pv .b-s.is-hover{background:var(--surface-2)}
+.pv .b-g{background:transparent;color:var(--link)}
+.pv .b-g:hover,.pv .b-g.is-hover{background:var(--surface-2)}
+.pv .b-a{background:var(--accent);color:var(--on-accent)}
+.pv .b:focus-visible,.pv .is-focus,.pv .tgl:focus-visible,.pv [role=tab]:focus-visible,.pv [role=radio]:focus-visible,.pv .xbtn:focus-visible{outline:2px solid var(--focus-ring);outline-offset:2px}
+.pv .b:disabled{background:var(--disabled);color:var(--text-muted);cursor:not-allowed}
+.pv .sec{padding:26px 22px;border-top:1px solid var(--border)}
+.pv .sec h2{font-size:12px;letter-spacing:.07em;text-transform:uppercase;color:var(--text-muted);margin:0 0 12px;font-weight:700;display:flex;justify-content:space-between;align-items:center;gap:8px}
+.pv .grid3{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:14px}
+.pv .cardu{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:16px}
+.pv .cardu h3{margin:8px 0 4px;font-size:16px;text-transform:none;letter-spacing:0;color:var(--text)}
+.pv .cardu p{margin:0;color:var(--text-muted);font-size:14px}
+.pv .tag{display:inline-block;font:600 12px var(--sans);padding:2px 8px;border-radius:99px;background:var(--surface-2);color:var(--text);border:1px solid var(--border)}
+.pv .states{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.pv .states small{display:block;color:var(--text-muted);font-size:11px;margin-top:4px;text-align:center}
+.pv label.f{display:block;font-weight:600;font-size:14px;margin-bottom:5px}
+.pv .inp{width:100%;max-width:340px;background:var(--surface);color:var(--text);border:1.5px solid var(--border-strong);border-radius:8px;padding:9px 11px;font:15px var(--sans)}
+.pv .inp:focus-visible{outline:2px solid var(--focus-ring);outline-offset:2px}
+.pv .inp.err{border-color:var(--error)}
+.pv .help{font-size:13px;color:var(--text-muted);margin-top:5px}
+.pv .errmsg,.pv .okmsg{font-size:13px;margin-top:5px;display:flex;gap:6px;align-items:center;font-weight:600}
+.pv .errmsg{color:var(--error)} .pv .okmsg{color:var(--success)}
+.pv .alerts{display:grid;gap:8px}
+.pv .al{display:flex;gap:10px;align-items:flex-start;padding:10px 12px;border-radius:8px;background:var(--t,var(--surface));border:1px solid var(--border);border-left:4px solid currentColor;font-size:14px}
+.pv .al[hidden]{display:none}
+.pv .al b{font-weight:700;color:var(--text)}.pv .al span{color:var(--text);flex:1}
+.pv .al svg{flex:none;margin-top:2px}
+.pv .al.s{color:var(--success);--t:var(--tint-success)}.pv .al.w{color:var(--warning);--t:var(--tint-warning)}.pv .al.e{color:var(--error);--t:var(--tint-error)}.pv .al.i{color:var(--info);--t:var(--tint-info)}
+.pv .xbtn{background:transparent;border:0;color:var(--text);font-size:18px;line-height:1;cursor:pointer;border-radius:6px;padding:0 6px}
+.pv .xbtn:hover{background:var(--surface-2)}
+.pv .bars{display:grid;gap:8px;max-width:460px}
+.pv .bar{display:grid;grid-template-columns:96px 1fr 38px;gap:8px;align-items:center;font-size:13px}
+.pv .bar i{display:block;height:14px;border-radius:4px}
+.pv .legend{display:flex;gap:14px;flex-wrap:wrap;font-size:13px;margin-top:10px;color:var(--text-muted)}
+.pv .legend span{display:inline-flex;gap:6px;align-items:center}
+.pv .legend em{width:12px;height:12px;border-radius:3px;display:inline-block}
+.pv .foot{padding:18px 22px;border-top:1px solid var(--border);color:var(--text-muted);font-size:13px;background:var(--surface)}
+/* interactive components */
+.pv .tgl-row{display:flex;gap:12px;align-items:center;margin-bottom:16px}
+.pv .tgl{width:46px;height:26px;border-radius:99px;border:2px solid var(--border-strong);background:var(--surface);position:relative;cursor:pointer;padding:0;flex:none}
+.pv .tgl .k{position:absolute;top:3px;left:3px;width:16px;height:16px;border-radius:50%;background:var(--border-strong);transition:transform .15s}
+.pv .tgl[aria-checked=true]{background:var(--primary);border-color:var(--primary)}
+.pv .tgl[aria-checked=true] .k{transform:translateX(20px);background:var(--on-primary)}
+.pv .tabs{display:flex;gap:2px;border-bottom:1px solid var(--border);margin-bottom:10px;flex-wrap:wrap}
+.pv [role=tab]{background:transparent;color:var(--text-muted);border:0;border-bottom:2px solid transparent;padding:8px 12px;font:600 14px var(--sans);cursor:pointer;border-radius:6px 6px 0 0}
+.pv [role=tab]:hover{background:var(--surface-2);color:var(--text)}
+.pv [role=tab][aria-selected=true]{color:var(--text);background:var(--selected);border-bottom-color:var(--primary)}
+.pv .panel{color:var(--text);font-size:14px;min-height:44px}
+.pv .opts{display:grid;gap:6px;max-width:420px;margin-top:16px}
+.pv [role=radio]{display:flex;justify-content:space-between;align-items:center;width:100%;text-align:left;background:var(--surface);color:var(--text);border:1px solid var(--border);border-radius:8px;padding:10px 12px;font:14px var(--sans);cursor:pointer}
+.pv [role=radio]:hover{background:var(--surface-2)}
+.pv [role=radio][aria-checked=true]{background:var(--selected);border-color:var(--primary)}
+.pv [role=radio] .ck{visibility:hidden;font-weight:700}
+.pv [role=radio][aria-checked=true] .ck{visibility:visible}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs id="svgdefs"></defs></svg>
+<div id="toast" role="status" aria-live="polite"></div>
+<div class="app">
+<aside>
+  <h1>Color Palette Lab</h1>
+  <p class="note">Live demo of the color-palette-designer skill. Every number below is computed in your browser by the same engine as <code>scripts/palette.mjs</code>.</p>
+  <p class="credit">Created by <a href="https://ailive.fr" target="_blank" rel="noopener">Ailive.fr</a></p>
+
+  <div class="field"><span class="lbl">Theme</span>
+    <div class="seg" id="seg-mode"><button data-v="light" aria-pressed="true">Light</button><button data-v="dark" aria-pressed="false">Dark</button></div>
+    <div class="note" id="mode-note"></div>
+  </div>
+
+  <div class="field"><span class="lbl">Vision preview</span>
+    <div class="seg" id="seg-vision">
+      <button data-v="none" aria-pressed="true">Normal</button><button data-v="protan" aria-pressed="false">Protan</button>
+      <button data-v="deutan" aria-pressed="false">Deutan</button><button data-v="tritan" aria-pressed="false">Tritan</button>
+      <button data-v="gray" aria-pressed="false">Grayscale</button>
+    </div>
+  </div>
+
+  <div class="field" id="failwrap" hidden><label class="chk"><input type="checkbox" id="fail"> Apply deliberate failure case</label><div class="note" id="failnote"></div></div>
+
+  <h3 style="margin-top:22px">Generator</h3>
+  <p class="note">Moving any slider switches to a live generated palette (both modes, contrast-solved).</p>
+  <div class="field"><div class="row"><span>Hue</span><output id="o-hue"></output></div><input type="range" id="g-hue" min="0" max="360" step="1" value="155"></div>
+  <div class="field"><div class="row"><span>Chroma</span><output id="o-chroma"></output></div><input type="range" id="g-chroma" min="0.02" max="0.26" step="0.005" value="0.07"></div>
+  <div class="field"><div class="row"><span>Neutral hue</span><output id="o-nhue"></output></div><input type="range" id="g-nhue" min="0" max="360" step="1" value="95"></div>
+  <div class="field"><div class="row"><span>Neutral chroma</span><output id="o-nchroma"></output></div><input type="range" id="g-nchroma" min="0" max="0.05" step="0.001" value="0.010"></div>
+  <div class="field"><label class="chk"><input type="checkbox" id="g-acc" checked> Accent</label><div class="row"><span>Accent offset</span><output id="o-acc"></output></div><input type="range" id="g-off" min="-180" max="180" step="5" value="-110"></div>
+</aside>
+
+<main>
+  <div class="toolbar">
+    <div class="tb-pal"><label class="lbl" for="pal">Palette</label><select id="pal"></select></div>
+    <div><span class="lbl">Conformance</span>
+      <div class="seg" id="seg-conf"><button data-v="AA" aria-pressed="true">AA</button><button data-v="AAA" aria-pressed="false">AAA</button></div></div>
+    <div><span class="lbl">State mixes</span>
+      <div class="seg" id="seg-sp"><button data-v="subtle" aria-pressed="false">Subtle</button><button data-v="standard" aria-pressed="true">Standard</button><button data-v="strong" aria-pressed="false">Strong</button></div></div>
+    <span class="note" id="sp-note"></span>
+  </div>
+
+  <section class="frame">
+    <div class="frame-bar"><span id="fb-name"></span><span id="fb-note"></span></div>
+    <div id="vis-wrap"><div class="pv" id="pv">
+      <div class="nav"><div class="brand"><span class="logo"></span>Verdana Studio</div>
+        <div class="links"><span>Shop</span><span>Journal</span><span><a href="#" onclick="return false">Account</a></span></div></div>
+      <div class="hero"><div class="blob"></div><div class="hero-in">
+        <h1>Quiet colors that still pass contrast.</h1>
+        <p class="lead">One action hue, tinted neutrals, and an accent that earns its place. <a href="#" onclick="return false">Read the method</a>.</p>
+        <div class="actions"><button class="b b-p">Primary action</button><button class="b b-s">Secondary</button><button class="b b-g">Ghost link</button></div></div></div>
+      <div class="sec"><h2>Cards and surfaces</h2><div class="grid3">
+        <div class="cardu"><span class="tag">New</span><h3>Layered surfaces</h3><p>Elevation comes from lightness steps, not shadows alone.</p></div>
+        <div class="cardu"><span class="tag">Muted text</span><h3>Secondary copy</h3><p>Muted text still reaches 4.5:1 on every surface it sits on.</p></div>
+        <div class="cardu"><button class="b b-a" style="margin-bottom:8px">Accent fill</button><p>Accent as a fill with its own on-accent text color.</p></div></div></div>
+      <div class="sec"><h2>Button states (hover, press and tab to the real ones)</h2><div class="states">
+        <div><button class="b b-p">Default</button><small>default</small></div>
+        <div><button class="b b-p is-hover">Hover</button><small id="sm-h">mix</small></div>
+        <div><button class="b b-p is-active">Active</button><small id="sm-a">mix</small></div>
+        <div><button class="b b-p is-focus">Focus</button><small>2px ring</small></div>
+        <div><button class="b b-p" disabled>Disabled</button><small id="sm-d">mixed to bg</small></div></div></div>
+      <div class="sec"><h2>Interactive components (selected states use the solved tint)</h2>
+        <div class="tgl-row"><button class="tgl" id="tgl" role="switch" aria-checked="false" aria-labelledby="tgl-l"><span class="k"></span></button><span id="tgl-l">Email me restock alerts: <b id="tgl-s">off</b></span></div>
+        <div class="tabs" role="tablist" id="tabs">
+          <button role="tab" aria-selected="true" data-p="Overview: light, calm, one action hue.">Overview</button>
+          <button role="tab" aria-selected="false" tabindex="-1" data-p="Ingredients: rooibos, lemon myrtle, a pinch of rose.">Ingredients</button>
+          <button role="tab" aria-selected="false" tabindex="-1" data-p="Reviews: 4.8 average from 212 orders.">Reviews</button></div>
+        <div class="panel" id="tabpanel" role="tabpanel">Overview: light, calm, one action hue.</div>
+        <div class="opts" role="radiogroup" aria-label="Delivery" id="opts">
+          <button role="radio" aria-checked="true" tabindex="0"><span>Standard delivery, 3 days</span><span class="ck" aria-hidden="true">&#10003;</span></button>
+          <button role="radio" aria-checked="false" tabindex="-1"><span>Express, next day</span><span class="ck" aria-hidden="true">&#10003;</span></button>
+          <button role="radio" aria-checked="false" tabindex="-1"><span>Pick up in store</span><span class="ck" aria-hidden="true">&#10003;</span></button></div></div>
+      <div class="sec"><h2>Form with live validation (icon + text, not color alone)</h2>
+        <label class="f" for="e1">Email (type to validate)</label><input class="inp err" id="e1" value="hello@" aria-invalid="true" aria-describedby="e1m" autocomplete="off">
+        <div id="e1m" aria-live="polite"></div>
+        <div style="height:12px"></div><label class="f" for="e2">Postcode</label><input class="inp" id="e2" value="75017"><div class="help">Border uses border-strong (3:1), not the decorative border.</div></div>
+      <div class="sec"><h2><span>Status (dismissible)</span><button class="b b-g" id="restore" style="padding:2px 8px;font-size:12px" hidden>Restore all</button></h2><div class="alerts" id="alerts">
+        <div class="al s"><svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path d="M8 1a7 7 0 1 0 0 14A7 7 0 0 0 8 1Zm-1 10L4 8l1-1 2 2 4-4 1 1-5 5Z"/></svg><span><b>Success.</b> Order confirmed.</span><button class="xbtn" aria-label="Dismiss">&times;</button></div>
+        <div class="al w"><svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path d="M8 1 15 14H1L8 1Zm-.75 5v4h1.5V6h-1.5Zm0 5v1.5h1.5V11h-1.5Z"/></svg><span><b>Warning.</b> Stock is running low.</span><button class="xbtn" aria-label="Dismiss">&times;</button></div>
+        <div class="al e"><svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path d="M8 1a7 7 0 1 0 0 14A7 7 0 0 0 8 1Zm3 9-1 1-2-2-2 2-1-1 2-2-2-2 1-1 2 2 2-2 1 1-2 2 2 2Z"/></svg><span><b>Error.</b> Payment declined.</span><button class="xbtn" aria-label="Dismiss">&times;</button></div>
+        <div class="al i"><svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path d="M8 1a7 7 0 1 0 0 14A7 7 0 0 0 8 1Zm-.75 3h1.5v1.5h-1.5V4Zm0 3h1.5v5h-1.5V7Z"/></svg><span><b>Info.</b> Free shipping over 60.</span><button class="xbtn" aria-label="Dismiss">&times;</button></div></div></div>
+      <div class="sec"><h2>Chart with Okabe-Ito categorical set (direct labels)</h2>
+        <div class="bars" id="bars"></div><div class="legend" id="legend"></div></div>
+      <div class="foot">Footer text uses text-muted on surface. <a href="#" onclick="return false">Privacy</a></div>
+    </div></div>
+  </section>
+
+  <section class="card"><header><h2>Roles <span class="note">(edit any color: everything below updates live; click a value to copy)</span></h2>
+      <div style="display:flex;gap:10px;align-items:center"><span class="note" id="roles-note"></span><button class="btn" id="reset-edits" hidden>Reset edits</button></div></header>
+    <div class="scroll"><table><thead><tr><th>Role</th><th>Color</th><th>OKLCH (exact)</th></tr></thead><tbody id="roles"></tbody></table></div></section>
+
+  <section class="card"><header><h2>Contrast audit</h2>
+    <div style="display:flex;gap:14px;align-items:center;flex-wrap:wrap"><span id="audit-sum"></span><label class="chk" style="margin:0"><input type="checkbox" id="onlyfail"> failing only</label></div></header>
+    <div class="scroll"><table><thead><tr><th>Sample</th><th>Pair</th><th>Ratio</th><th>Need</th><th>Grade</th><th>APCA Lc</th><th>Result</th></tr></thead><tbody id="audit"></tbody></table></div>
+    <p class="note">WCAG 2.2 decides pass/fail. APCA Lc is advisory: WCAG 3 has not adopted a contrast algorithm. Body text under |Lc| 75 is thin; under 15 is effectively invisible.</p></section>
+
+  <section class="card" id="cc-card"><header><h2>Contrast checker</h2><span id="cc-sum"></span></header>
+    <div class="ctl">
+      <label>Foreground<span class="ed"><input type="color" class="cp" id="cc-fg-c" aria-label="Foreground color"><input class="hx" id="cc-fg" maxlength="7" spellcheck="false"></span></label>
+      <label>Background<span class="ed"><input type="color" class="cp" id="cc-bg-c" aria-label="Background color"><input class="hx" id="cc-bg" maxlength="7" spellcheck="false"></span></label>
+      <label>Needs<select id="cc-kind"><option value="4.5">Text AA, 4.5</option><option value="7">Text AAA, 7</option><option value="3">Large text / UI, 3</option></select></label>
+      <label>Load a palette pair<select id="cc-load"></select></label>
+      <button class="btn" id="cc-swap">Swap</button><button class="btn" id="cc-fix">Nudge lightness to pass</button>
+    </div>
+    <div class="cc-sample" id="cc-sample">Aa The quick brown fox</div>
+    <div class="mono note" id="cc-out"></div></section>
+
+  <section class="card" id="dark-card"><header><h2>Dark-mode rules</h2><span id="dark-sum"></span></header>
+    <details class="fold"><summary>Rules <span id="dark-count"></span></summary>
+      <div class="scroll"><table><thead><tr><th>Rule</th><th>Status</th><th>Detail</th></tr></thead><tbody id="dark-rules"></tbody></table></div></details>
+    <p class="note" id="dark-note">FAIL blocks shipping. WARN needs a stated reason (for example a deliberate recessed sidebar). Full list with fixes: references/dark-mode-rules.md.</p></section>
+
+  <section class="card" id="area-card"><header><h2>Area split (percent of visible area)</h2><span id="area-sum"></span></header>
+    <div class="ctl">
+      <label>Preset<select id="ap"></select></label>
+      <label>Neutral %<input type="number" id="an" min="0" max="100" step="1"></label>
+      <label>Secondary %<input type="number" id="as" min="0" max="100" step="1"></label>
+      <label>Accent %<input type="number" id="aa" min="0" max="100" step="1"></label>
+      <label>Semantic %<input type="number" id="asem" min="0" max="100" step="1" value="0"></label>
+      <button class="btn" id="measure">Measure this preview</button>
+    </div>
+    <div class="stack" id="area-bar"></div><div class="note" id="area-meas"></div>
+    <details class="fold"><summary>Rules <span id="area-count"></span></summary>
+      <div class="scroll"><table><thead><tr><th>Rule</th><th>Status</th><th>Detail</th></tr></thead><tbody id="area-rules"></tbody></table></div></details>
+    <p class="note" id="area-note"></p></section>
+
+  <section class="card" id="state-card"><header><h2>State mixes (solved per palette)</h2><span id="state-sum"></span></header>
+    <div class="sw-row" id="state-sw"></div>
+    <details class="fold"><summary>Rules <span id="state-count"></span></summary>
+      <div class="scroll"><table><thead><tr><th>Rule</th><th>Status</th><th>Detail</th></tr></thead><tbody id="state-rules"></tbody></table></div></details>
+    <details class="fold"><summary>CSS variables</summary><pre id="state-css"></pre></details>
+    <p class="note">Hover and active percentages are floors from the preset; the engine raises them until the lightness step is visible, and mixes toward whichever of text/bg keeps on-primary readable.</p></section>
+
+  <section class="card"><header><h2>Color-blind separation</h2><span class="note">dE<sub>OK</sub> under simulation; below 0.10 the pair collapses, so add an icon or label.</span></header>
+    <div class="scroll"><table><thead><tr><th>Pair</th><th>Protan</th><th>Deutan</th><th>Tritan</th><th></th></tr></thead><tbody id="cvd"></tbody></table></div></section>
+
+  <details class="card fold" id="css-card"><summary><h2>CSS custom properties</h2></summary>
+    <div class="ctl" style="margin-top:12px"><button class="btn" id="copy">Copy CSS</button><button class="btn" id="dl-css">Download .css</button><button class="btn" id="dl-json">Download tokens (DTCG .json)</button><button class="btn" id="copy-link">Copy link to this state</button></div>
+    <pre id="css"></pre></details>
+
+  <section class="card"><header><h2>Why OKLCH: HSL lightness lies</h2><label class="chk" style="margin:0"><input type="checkbox" id="lab-gray" checked> grayscale view</label></header>
+    <p class="note">Same hue sweep, six hues. Row 1: <code>hsl(h 80% 50%)</code>. Row 2: <code>oklch(0.65 0.14 h)</code>. In grayscale the HSL row shows wildly different lightness (yellow bright, blue dark); the OKLCH row stays even, which is why contrast can be solved by moving L alone.</p>
+    <div id="lab-a" class="lab-row tall gray"></div><div id="lab-b" class="lab-row tall gray"></div>
+    <p class="note" style="margin-top:14px">50-950 ramp for the current primary hue (OKLCH L targets, chroma tapered, gamut-mapped):</p>
+    <div id="lab-ramp" class="lab-row"></div></section>
+
+  <footer class="site-credit">Created by <a href="https://ailive.fr" target="_blank" rel="noopener">Ailive.fr</a> · AI automation, Shopify, WordPress, design, 3D and video</footer>
+</main>
+</div>
+
+<script>
+/*@@ENGINE@@*/
+</script>
+<script>
+/*@@MEASURE@@*/
+</script>
+<script>
+/*@@PALETTES@@*/
+(function(){
+'use strict';
+const $ = (id)=>document.getElementById(id);
+const OKABE = [['Blue','#0072B2'],['Orange','#E69F00'],['Bluish green','#009E73'],['Reddish purple','#CC79A7'],['Sky blue','#56B4E9'],['Vermilion','#D55E00']];
+const GEN_ID = '__gen__';
+const state = { id: DEFAULT_PALETTE, mode:'light', vision:'none', conf:'AA', fail:false, sp:'standard', ap:'classic', over:{}, ccInit:false };
+const badge = (s)=>`<span class="badge ${s==='pass'?'b-AA':s==='warn'?'b-UI':'b-FAIL'}">${s.toUpperCase()}</span>`;
+const sumHtml = (nf,nw)=> nf ? `<span class="bad">${nf} failing</span>` : `<span class="ok">no failing rules</span>` + (nw ? ` <span class="note">· ${nw} warning${nw>1?'s':''}</span>` : '');
+const hexOk = (v)=>/^#?([0-9a-f]{3}|[0-9a-f]{6})$/i.test((v||'').trim());
+const toHex = (v)=>normHex('#'+v.trim().replace('#',''));
+
+// ---- toast + copy ----
+let toastT;
+function toast(msg){ const t=$('toast'); t.textContent=msg; t.classList.add('on'); clearTimeout(toastT); toastT=setTimeout(()=>t.classList.remove('on'),1400); }
+async function copyText(text){
+  try{ await navigator.clipboard.writeText(text); return true; }catch(_){
+    const ta=document.createElement('textarea'); ta.value=text; ta.style.position='fixed'; ta.style.opacity='0'; document.body.appendChild(ta); ta.select();
+    let ok=false; try{ ok=document.execCommand('copy'); }catch(_e){} ta.remove(); return ok; }
+}
+document.addEventListener('click', async (e)=>{
+  const t = e.target.closest('[data-copy]'); if(!t) return;
+  const v = t.getAttribute('data-copy') || t.textContent.trim();
+  toast((await copyText(v)) ? 'Copied ' + v : 'Copy failed: select and copy manually');
+});
+
+// ---- CVD filters ----
+(function(){
+  const f = (id,M)=>`<filter id="f-${id}" color-interpolation-filters="linearRGB"><feColorMatrix type="matrix" values="${M.map(r=>r.join(' ')+' 0 0').join(' ')} 0 0 0 1 0"/></filter>`;
+  $('svgdefs').innerHTML = Object.entries(CVD).map(([k,M])=>f(k,M)).join('');
+})();
+
+// ---- palette select ----
+const groups = {natural:'Natural / wellness / organic','dev-dark':'Dark developer','product':'Light product / industry','agency':'Agency / portfolio / playful',custom:'Custom'};
+(function(){
+  const sel = $('pal'); let html = `<option value="${GEN_ID}">★ Generated (live, both modes)</option>`;
+  for (const [g,label] of Object.entries(groups)) {
+    const items = DATA.palettes.filter(p=>p.group===g); if(!items.length) continue;
+    html += `<optgroup label="${label}">` + items.map(p=>`<option value="${p.id}">${p.name} · ${p.mode}</option>`).join('') + '</optgroup>';
+  }
+  sel.innerHTML = html; sel.value = state.id;
+})();
+
+function genParams(){
+  return { hue:+$('g-hue').value, chroma:+$('g-chroma').value, neutralHue:+$('g-nhue').value, neutralChroma:+$('g-nchroma').value,
+    accentOffset: $('g-acc').checked ? +$('g-off').value : null, aaa: state.conf==='AAA' };
+}
+function baseCurrent(){
+  if (state.id === GEN_ID) {
+    const gp = genParams(); const pal = generate({...gp, accentChroma: gp.chroma});
+    return { name:'Generated', mode:state.mode, roles:pal[state.mode], both:pal, note:`hue ${gp.hue}, chroma ${gp.chroma}, neutral ${gp.neutralHue}/${gp.neutralChroma}${gp.accentOffset===null?'':', accent '+(gp.accentOffset>0?'+':'')+gp.accentOffset}°` };
+  }
+  const p = DATA.palettes.find(x=>x.id===state.id);
+  const sem = DATA._meta.semantic[p.mode]||{};
+  const base = { ...p.roles }; for (const k in sem) if (!(k in base)) base[k] = sem[k];
+  const roles = (state.fail && p.failcase) ? { ...base, ...p.failcase } : base;
+  return { name:p.name, mode:p.mode, roles, both:null, note:p.note, failcase:p.failcase };
+}
+function current(){
+  const c = baseCurrent(); const keys = Object.keys(state.over).filter(k=>k in c.roles);
+  if (keys.length) { c.roles = {...c.roles}; keys.forEach(k=>c.roles[k]=state.over[k]); c.edited = keys.length; }
+  return c;
+}
+function fillView(r){
+  const v = {...r};
+  v.surface ||= v.bg; v['surface-2'] ||= v.surface; v.link ||= v.primary; v.accent ||= v.primary; v['on-accent'] ||= v['on-primary'];
+  v['border-strong'] ||= v['text-muted']; v['focus-ring'] ||= v.primary; v.border ||= v['surface-2'];
+  for (const k of ['success','warning','error','info']) v[k] ||= v.text;
+  return v;
+}
+const fix = (n,d=2)=>n.toFixed(d);
+const lcOf = (n)=>Math.round(n);
+
+// ---- roles table (editable) ----
+function buildRoles(roles){
+  $('roles').innerHTML = Object.entries(roles).map(([k,v])=>`<tr data-role="${k}">
+    <td class="rn">${k}</td>
+    <td class="mono"><span class="ed"><input type="color" class="cp" value="${v.toLowerCase()}" aria-label="Edit ${k}"><input class="hx" value="${v}" maxlength="7" spellcheck="false" aria-label="${k} hex"></span> <button class="cpy" data-copy="${v}" title="Copy hex" aria-label="Copy ${k} hex">copy</button></td>
+    <td class="mono ol" data-copy="${oklchOf(v)}" title="Click to copy">${oklchOf(v)}</td></tr>`).join('');
+}
+function updateRoleCells(roles){
+  document.querySelectorAll('#roles tr').forEach(tr=>{
+    const k=tr.dataset.role, v=roles[k]; if(!v) return;
+    const cp=tr.querySelector('.cp'), hx=tr.querySelector('.hx');
+    if (document.activeElement!==cp) cp.value=v.toLowerCase();
+    if (document.activeElement!==hx) hx.value=v;
+    tr.querySelector('.cpy').dataset.copy=v;
+    const ol=tr.querySelector('.ol'); ol.textContent=oklchOf(v); ol.dataset.copy=oklchOf(v);
+    tr.classList.toggle('edited', k in state.over);
+  });
+}
+function setOver(role, hex){
+  const base = baseCurrent().roles[role];
+  if (base && hex.toUpperCase()===base.toUpperCase()) delete state.over[role]; else state.over[role]=hex.toUpperCase();
+  render({keepRoles:true});
+}
+$('roles').addEventListener('input', e=>{
+  if (!e.target.classList.contains('cp')) return;
+  setOver(e.target.closest('tr').dataset.role, e.target.value);
+});
+$('roles').addEventListener('change', e=>{
+  if (!e.target.classList.contains('hx')) return;
+  const role=e.target.closest('tr').dataset.role;
+  if (hexOk(e.target.value)) setOver(role, toHex(e.target.value)); else { e.target.value=current().roles[role]; toast('Use a hex color like #3F6B4E'); }
+});
+$('reset-edits').addEventListener('click',()=>{ state.over={}; render(); toast('Edits reset'); });
+
+function render(opts){
+  opts = opts||{};
+  const cur = current();
+  const mode = cur.both ? state.mode : cur.mode;
+  const single = !cur.both;
+  document.querySelectorAll('#seg-mode button').forEach(b=>{ b.disabled = single; b.setAttribute('aria-pressed', String(b.dataset.v===mode)); });
+  $('mode-note').textContent = single ? `This palette is native ${cur.mode}. Pick ★ Generated for a light/dark pair.` : '';
+  $('failwrap').hidden = !cur.failcase;
+  if (cur.failcase) $('failnote').textContent = 'Replaces ' + Object.entries(cur.failcase).map(([k,v])=>`${k} → ${v}`).join(', ') + '. Watch the audit.';
+
+  // preview
+  const view = fillView(cur.roles); const pv = $('pv');
+  for (const [k,v] of Object.entries(view)) pv.style.setProperty('--'+k, v);
+  const w = $('vis-wrap');
+  w.style.filter = state.vision==='gray' ? 'grayscale(1)' : (CVD[state.vision] ? `url(#f-${state.vision})` : 'none');
+  $('fb-name').textContent = `${cur.name} · ${mode}` + (cur.edited ? ` · edited (${cur.edited})` : '') + (state.vision!=='none' ? ` · ${state.vision==='gray'?'grayscale':state.vision+' simulation'}` : '');
+  $('fb-note').textContent = cur.note || '';
+
+  // bars + legend
+  const vals=[74,58,41,27];
+  $('bars').innerHTML = OKABE.slice(0,4).map(([n,c],i)=>`<div class="bar"><span>${n}</span><i style="width:${vals[i]}%;background:${c}"></i><span>${vals[i]}%</span></div>`).join('');
+  $('legend').innerHTML = OKABE.map(([n,c])=>`<span><em style="background:${c}"></em>${n}</span>`).join('');
+
+  // roles
+  const roles = cur.roles;
+  if (opts.keepRoles) updateRoleCells(roles); else { buildRoles(roles); updateRoleCells(roles); }
+  $('roles-note').textContent = Object.keys(roles).length + ' roles' + (cur.edited ? `, ${cur.edited} edited` : '');
+  $('reset-edits').hidden = !cur.edited;
+  validateEmail();
+
+  // audit
+  const aaa = state.conf==='AAA';
+  const rows = audit(roles,{aaa});
+  const failing = rows.filter(r=>!r.pass).length;
+  $('audit-sum').innerHTML = failing ? `<span class="bad">${failing} failing</span> <span class="note">of ${rows.length} pairs</span>` : `<span class="ok">all ${rows.length} pairs pass</span>`;
+  const only = $('onlyfail').checked;
+  $('audit').innerHTML = rows.filter(r=>!only||!r.pass).map(r=>`<tr>
+    <td><span class="chip" style="background:${r.bgHex};color:${r.fgHex}">Aa</span></td>
+    <td>${r.fg} <span class="note">on</span> ${r.bg}<div class="mono note"><span data-copy="${r.fgHex}" title="Click to copy">${r.fgHex}</span> / <span data-copy="${r.bgHex}" title="Click to copy">${r.bgHex}</span></div></td>
+    <td class="mono">${fix(r.ratio)}</td><td class="mono">${r.need}</td>
+    <td><span class="badge b-${r.grade}">${r.grade}</span></td><td class="mono">${lcOf(r.lc)}</td>
+    <td class="${r.pass?'ok':'bad'}">${r.pass?'pass':'FAIL'}</td></tr>`).join('') || '<tr><td colspan="7" class="note">Nothing to show.</td></tr>';
+
+  // contrast checker: pair loader + first fill
+  const cl = $('cc-load');
+  cl.innerHTML = '<option value="">Choose…</option>' + rows.map(r=>`<option value="${r.fgHex}|${r.bgHex}">${r.fg} on ${r.bg}</option>`).join('');
+  if (!state.ccInit && roles['text-muted'] && roles.bg) { $('cc-fg').value=roles['text-muted']; $('cc-bg').value=roles.bg; state.ccInit=true; }
+  ccRender();
+
+  // cvd
+  const cv = cvdReport(roles, [['primary','error'],['primary','success'],['success','error'],['accent','primary'],['warning','error']]);
+  $('cvd').innerHTML = cv.map(r=>`<tr><td><span class="sw" style="background:${roles[r.a]}"></span><span class="sw" style="background:${roles[r.b]}"></span>${r.a} vs ${r.b}</td>
+    <td class="mono">${fix(r.protan)}</td><td class="mono">${fix(r.deutan)}</td><td class="mono">${fix(r.tritan)}</td>
+    <td>${r.collapsed?'<span class="badge b-UI">collapses: needs icon/label</span>':'<span class="badge b-AA">ok</span>'}</td></tr>`).join('') || '<tr><td colspan="5" class="note">Not enough roles to compare.</td></tr>';
+
+  // state mixes
+  const sr = stateReport(view, state.sp);
+  const M = sr.mixes;
+  pv.style.setProperty('--hover', sr.hover); pv.style.setProperty('--active', sr.active); pv.style.setProperty('--disabled', sr.disabled); pv.style.setProperty('--selected', sr.selected);
+  for (const [k,v] of Object.entries(sr.tints)) pv.style.setProperty('--tint-'+k, v);
+  $('sm-h').textContent = `${M.hover}% toward ${M.name}`; $('sm-a').textContent = `${M.active}% toward ${M.name}`; $('sm-d').textContent = `${M.disabled}% toward bg`;
+  $('sp-note').textContent = `${state.sp}: floors ${STATE_PRESETS[state.sp].hover}/${STATE_PRESETS[state.sp].active}/${STATE_PRESETS[state.sp].disabled}% · solved ${M.hover}/${M.active}%`;
+  const sf = sr.rows.filter(r=>r.status==='fail').length, sw_ = sr.rows.filter(r=>r.status==='warn').length;
+  $('state-sum').innerHTML = sumHtml(sf,sw_);
+  $('state-count').textContent = `(${sr.rows.length})`;
+  const sw = (label, c)=>`<figure><i style="background:${c}"></i>${label}<br><span class="mono" data-copy="${c}" title="Click to copy">${c}</span></figure>`;
+  $('state-sw').innerHTML = sw('default', view.primary)+sw('hover', sr.hover)+sw('active', sr.active)+sw('disabled', sr.disabled)+sw('selected row', sr.selected)+Object.entries(sr.tints).map(([k,c])=>sw(k+' tint', c)).join('');
+  $('state-rules').innerHTML = sr.rows.map(r=>`<tr><td>${r.id} ${r.rule}</td><td>${badge(r.status)}</td><td class="mono note">${r.detail}</td></tr>`).join('');
+  $('state-css').textContent = ':root {\n' + stateCss(view, state.sp) + '\n}';
+  renderArea();
+
+  // dark-mode rules
+  if (mode === 'dark') {
+    const dr = darkCheck(roles, cur.both ? cur.both.light : null);
+    $('dark-sum').innerHTML = sumHtml(dr.filter(r=>r.status==='fail').length, dr.filter(r=>r.status==='warn').length);
+    $('dark-count').textContent = `(${dr.length})`;
+    $('dark-rules').innerHTML = dr.map(r=>`<tr><td>${r.id} ${r.rule}</td><td>${badge(r.status)}</td><td class="mono note">${r.detail}</td></tr>`).join('');
+  } else {
+    $('dark-sum').innerHTML = '<span class="note">switch Theme to Dark to evaluate</span>';
+    $('dark-count').textContent = '';
+    $('dark-rules').innerHTML = '<tr><td colspan="3" class="note">Rules D1-D11 apply to the dark role set.</td></tr>';
+  }
+
+  // css
+  $('css').textContent = (cur.both && !cur.edited) ? toCss(cur.both) : toCss({[mode]:roles});
+  lab(cur);
+  writeHash();
+}
+
+// ---- area split ----
+function renderArea(){
+  const n=+$('an').value||0, s=+$('as').value||0, a=+$('aa').value||0, sem=+$('asem').value||0;
+  const rows = areaCheck(n,s,a,{preset:state.ap, semantic:sem});
+  $('area-sum').innerHTML = sumHtml(rows.filter(r=>r.status==='fail').length, rows.filter(r=>r.status==='warn').length);
+  $('area-count').textContent = `(${rows.length})`;
+  const v = fillView(current().roles);
+  const seg = (pct,bg,fg,lbl)=>`<div style="flex:${Math.max(pct,0)} 1 0;background:${bg};color:${fg}">${pct>=6?lbl+' '+pct:''}</div>`;
+  $('area-bar').innerHTML = seg(n,v.bg,v.text,'neutral')+seg(s,v['border-strong'],v.bg,'secondary')+seg(a,v.primary,v['on-primary'],'accent')+(sem?seg(sem,v.error,v.bg,'sem'):'');
+  $('area-rules').innerHTML = rows.map(r=>`<tr><td>${r.id} ${r.rule}</td><td>${badge(r.status)}</td><td class="mono note">${r.detail}</td></tr>`).join('');
+  $('area-note').textContent = AREA_PRESETS[state.ap].name + ': ' + AREA_PRESETS[state.ap].for + '. Conventions, not research: they protect the isolation effect (a CTA hue must be rare).';
+}
+function setSplit(n,s,a,sem){ $('an').value=n; $('as').value=s; $('aa').value=a; $('asem').value=sem||0; }
+(function(){
+  const sel=$('ap'); sel.innerHTML = Object.entries(AREA_PRESETS).map(([id,p])=>`<option value="${id}">${p.name}</option>`).join(''); sel.value=state.ap;
+  setSplit(...AREA_PRESETS[state.ap].split,0);
+  sel.addEventListener('change',e=>{ state.ap=e.target.value; setSplit(...AREA_PRESETS[state.ap].split,0); renderArea(); writeHash(); });
+  ['an','as','aa','asem'].forEach(id=>$(id).addEventListener('input',renderArea));
+  $('measure').addEventListener('click',()=>{
+    const v = fillView(current().roles);
+    const m = measureArea(v, $('pv'), 8);
+    let n=Math.round(m.neutral), s=Math.round(m.secondary+m.other), a=Math.round(m.accent+m.gradient), sem=Math.round(m.semantic);
+    n += 100-(n+s+a+sem);
+    setSplit(n,s,a,sem); renderArea();
+    $('area-meas').textContent = `Measured on the sample UI: neutral ${m.neutral}, secondary ${m.secondary}, accent ${m.accent}, gradient ${m.gradient} (counted as accent), semantic ${m.semantic}, other ${m.other} (counted as secondary). This is the demo page, not a real site: measure yours with scripts/measure-area.js.`;
+  });
+})();
+
+// ---- contrast checker ----
+function ccRender(){
+  const fg=$('cc-fg').value, bg=$('cc-bg').value;
+  if (!hexOk(fg) || !hexOk(bg)) { $('cc-sum').innerHTML='<span class="note">enter two hex colors</span>'; return; }
+  const F=toHex(fg), B=toHex(bg), need=+$('cc-kind').value, r=contrast(F,B);
+  $('cc-fg-c').value=F.toLowerCase(); $('cc-bg-c').value=B.toLowerCase();
+  $('cc-sample').style.background=B; $('cc-sample').style.color=F;
+  $('cc-sum').innerHTML = `<span class="${r>=need?'ok':'bad'}">${r.toFixed(2)}:1 · ${r>=need?'pass':'FAIL'} (needs ${need})</span>`;
+  $('cc-out').innerHTML = `ratio ${r.toFixed(2)}:1 · grade text ${grade(r,'text')}, large ${grade(r,'large')}, UI ${grade(r,'ui')} · APCA Lc ${apca(F,B).toFixed(0)}<br><span data-copy="${oklchOf(F)}" title="Click to copy">fg ${oklchOf(F)}</span> · <span data-copy="${oklchOf(B)}" title="Click to copy">bg ${oklchOf(B)}</span>`;
+}
+['cc-fg','cc-bg'].forEach(id=>$(id).addEventListener('input',ccRender));
+$('cc-fg-c').addEventListener('input',e=>{ $('cc-fg').value=e.target.value.toUpperCase(); ccRender(); });
+$('cc-bg-c').addEventListener('input',e=>{ $('cc-bg').value=e.target.value.toUpperCase(); ccRender(); });
+$('cc-kind').addEventListener('change',ccRender);
+$('cc-load').addEventListener('change',e=>{ if(!e.target.value) return; const [f,b]=e.target.value.split('|'); $('cc-fg').value=f; $('cc-bg').value=b; e.target.value=''; ccRender(); });
+$('cc-swap').addEventListener('click',()=>{ const t=$('cc-fg').value; $('cc-fg').value=$('cc-bg').value; $('cc-bg').value=t; ccRender(); });
+$('cc-fix').addEventListener('click',()=>{
+  const fg=$('cc-fg').value, bg=$('cc-bg').value; if(!hexOk(fg)||!hexOk(bg)) return;
+  const F=toHex(fg), B=toHex(bg), need=+$('cc-kind').value;
+  if (contrast(F,B)>=need) { toast('Already passes'); return; }
+  const o=hexToOklch(F);
+  const c=[solveL(o,[B],need,'darker'), solveL(o,[B],need,'lighter')].filter(Boolean)
+    .sort((x,y)=>Math.abs(hexToOklch(x).l-o.l)-Math.abs(hexToOklch(y).l-o.l))[0];
+  if (!c) { toast('No lightness reaches ' + need + ':1 on this background'); return; }
+  $('cc-fg').value=c; ccRender(); toast(`Lightness ${o.l.toFixed(2)} → ${hexToOklch(c).l.toFixed(2)}, hue kept`);
+});
+
+// ---- lab ----
+function lab(cur){
+  const hues=[30,90,150,210,270,330];
+  $('lab-a').innerHTML = hues.map(h=>`<div style="background:hsl(${h} 80% 50%)"></div>`).join('');
+  $('lab-b').innerHTML = hues.map(h=>`<div style="background:${oklchToHex({l:0.65,c:0.14,h})}"></div>`).join('');
+  const o = hexToOklch(cur.roles.primary); const rp = ramp(o.h, Math.max(o.c,0.03));
+  $('lab-ramp').innerHTML = STEPS.map(s=>`<div title="${s} ${rp[s]}" data-copy="${rp[s]}" style="background:${rp[s]}"></div>`).join('');
+  document.querySelectorAll('#lab-a,#lab-b').forEach(e=>e.classList.toggle('gray',$('lab-gray').checked));
+}
+function syncOut(){
+  $('o-hue').textContent=$('g-hue').value+'°'; $('o-chroma').textContent=(+$('g-chroma').value).toFixed(3);
+  $('o-nhue').textContent=$('g-nhue').value+'°'; $('o-nchroma').textContent=(+$('g-nchroma').value).toFixed(3);
+  $('o-acc').textContent=$('g-acc').checked?($('g-off').value+'°'):'off';
+}
+function toGen(){ if(state.id!==GEN_ID){ state.id=GEN_ID; $('pal').value=GEN_ID; state.fail=false; $('fail').checked=false; } }
+
+// ---- controls ----
+$('pal').addEventListener('change',e=>{ state.id=e.target.value; state.fail=false; state.over={}; $('fail').checked=false; render(); });
+function syncSeg(id,val){ $(id).querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed',String(x.dataset.v===val))); }
+function seg(id,key,after){ $(id).addEventListener('click',e=>{ const b=e.target.closest('button'); if(!b||b.disabled) return;
+  state[key]=b.dataset.v; syncSeg(id,b.dataset.v); if(after) after(); render(); }); }
+seg('seg-mode','mode',()=>{ state.over={}; }); seg('seg-vision','vision'); seg('seg-conf','conf'); seg('seg-sp','sp');
+$('fail').addEventListener('change',e=>{ state.fail=e.target.checked; state.over={}; render(); });
+$('onlyfail').addEventListener('change',render);
+$('lab-gray').addEventListener('change',()=>lab(current()));
+['g-hue','g-chroma','g-nhue','g-nchroma','g-off'].forEach(id=>$(id).addEventListener('input',()=>{ toGen(); state.over={}; syncOut(); render(); }));
+$('g-acc').addEventListener('change',()=>{ toGen(); state.over={}; syncOut(); render(); });
+
+// ---- export ----
+function download(name,text,type){ const a=document.createElement('a'); a.href=URL.createObjectURL(new Blob([text],{type})); a.download=name; document.body.appendChild(a); a.click(); a.remove(); setTimeout(()=>URL.revokeObjectURL(a.href),1000); }
+$('copy').addEventListener('click',async()=>{ toast((await copyText($('css').textContent)) ? 'CSS copied' : 'Copy failed'); });
+$('dl-css').addEventListener('click',()=>{ const c=current(); download(`palette-${state.id}-${c.both?state.mode:c.mode}.css`, $('css').textContent, 'text/css'); });
+$('dl-json').addEventListener('click',()=>{ const c=current(); download(`palette-${state.id}-${c.both?state.mode:c.mode}.tokens.json`, JSON.stringify(toDtcg(c.roles),null,2), 'application/design-tokens+json'); });
+$('copy-link').addEventListener('click',async()=>{ writeHash(); toast((await copyText(location.href)) ? 'Link copied' : 'Copy failed'); });
+
+// ---- URL hash (shareable state) ----
+function writeHash(){
+  try{
+    const p=new URLSearchParams();
+    p.set('p',state.id); p.set('m',state.mode); p.set('c',state.conf); p.set('s',state.sp); p.set('v',state.vision); p.set('a',state.ap);
+    if(state.id===GEN_ID) p.set('g',[$('g-hue').value,$('g-chroma').value,$('g-nhue').value,$('g-nchroma').value,$('g-acc').checked?$('g-off').value:'x'].join(','));
+    const o=Object.entries(state.over).map(([k,v])=>k+':'+v.replace('#','')).join(',');
+    if(o) p.set('o',o);
+    history.replaceState(null,'','#'+p.toString());
+  }catch(_){}
+}
+function readHash(){
+  try{
+    const p=new URLSearchParams(location.hash.slice(1)); if(![...p.keys()].length) return;
+    const id=p.get('p'); if(id && (id===GEN_ID || DATA.palettes.some(x=>x.id===id))) { state.id=id; $('pal').value=id; }
+    if(['light','dark'].includes(p.get('m'))) state.mode=p.get('m');
+    if(['AA','AAA'].includes(p.get('c'))) { state.conf=p.get('c'); syncSeg('seg-conf',state.conf); }
+    if(STATE_PRESETS[p.get('s')]) { state.sp=p.get('s'); syncSeg('seg-sp',state.sp); }
+    if(['none','protan','deutan','tritan','gray'].includes(p.get('v'))) { state.vision=p.get('v'); syncSeg('seg-vision',state.vision); }
+    if(AREA_PRESETS[p.get('a')]) { state.ap=p.get('a'); $('ap').value=state.ap; setSplit(...AREA_PRESETS[state.ap].split,0); }
+    const g=p.get('g'); if(g){ const [h,c,nh,nc,off]=g.split(','); $('g-hue').value=h; $('g-chroma').value=c; $('g-nhue').value=nh; $('g-nchroma').value=nc; if(off==='x') $('g-acc').checked=false; else { $('g-acc').checked=true; $('g-off').value=off; } }
+    const o=p.get('o'); if(o) o.split(',').forEach(t=>{ const [k,v]=t.split(':'); if(k && /^[0-9a-f]{6}$/i.test(v||'')) state.over[k]='#'+v.toUpperCase(); });
+    syncSeg('seg-mode',state.mode);
+  }catch(_){}
+}
+
+// ---- interactive sample components ----
+function validateEmail(){
+  const e=$('e1'), m=$('e1m'), v=e.value.trim();
+  const ok=/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v);
+  e.classList.toggle('err',!ok); e.setAttribute('aria-invalid',String(!ok));
+  const icon = ok ? '<svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 1a7 7 0 1 0 0 14A7 7 0 0 0 8 1Zm-1 10L4 8l1-1 2 2 4-4 1 1-5 5Z"/></svg>'
+    : '<svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 1 15 14H1L8 1Zm-.75 5v4h1.5V6h-1.5Zm0 5v1.5h1.5V11h-1.5Z"/></svg>';
+  m.className = ok ? 'okmsg' : 'errmsg';
+  m.innerHTML = icon + (ok ? 'Looks good.' : (v ? 'Enter a complete address, like name@example.com.' : 'Email is required.'));
+}
+$('e1').addEventListener('input',validateEmail);
+$('tgl').addEventListener('click',()=>{ const t=$('tgl'); const on=t.getAttribute('aria-checked')!=='true'; t.setAttribute('aria-checked',String(on)); $('tgl-s').textContent=on?'on':'off'; });
+(function(){
+  const tabs=[...document.querySelectorAll('#tabs [role=tab]')];
+  const sel=(t)=>{ tabs.forEach(x=>{ const on=x===t; x.setAttribute('aria-selected',String(on)); x.tabIndex=on?0:-1; }); $('tabpanel').textContent=t.dataset.p; t.focus(); };
+  tabs.forEach((t,i)=>{ t.addEventListener('click',()=>sel(t));
+    t.addEventListener('keydown',e=>{ if(e.key==='ArrowRight') sel(tabs[(i+1)%tabs.length]); if(e.key==='ArrowLeft') sel(tabs[(i-1+tabs.length)%tabs.length]); }); });
+  const opts=[...document.querySelectorAll('#opts [role=radio]')];
+  const pick=(o)=>{ opts.forEach(x=>{ const on=x===o; x.setAttribute('aria-checked',String(on)); x.tabIndex=on?0:-1; }); o.focus(); };
+  opts.forEach((o,i)=>{ o.addEventListener('click',()=>pick(o));
+    o.addEventListener('keydown',e=>{ if(e.key==='ArrowDown'||e.key==='ArrowRight'){ e.preventDefault(); pick(opts[(i+1)%opts.length]); } if(e.key==='ArrowUp'||e.key==='ArrowLeft'){ e.preventDefault(); pick(opts[(i-1+opts.length)%opts.length]); } }); });
+  const als=[...document.querySelectorAll('#alerts .al')];
+  const upd=()=>{ $('restore').hidden = !als.some(a=>a.hidden); };
+  als.forEach(a=>a.querySelector('.xbtn').addEventListener('click',()=>{ a.hidden=true; upd(); }));
+  $('restore').addEventListener('click',()=>{ als.forEach(a=>a.hidden=false); upd(); });
+})();
+
+readHash(); syncOut(); render();
+})();
+</script>
+</body>
+</html>

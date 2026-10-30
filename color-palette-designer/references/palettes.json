@@ -1,0 +1,114 @@
+{
+  "_meta": {
+    "about": "15 curated palettes. Hex is the source of truth; OKLCH values and contrast ratios are recomputed by scripts/palette.mjs docs (never hand-edited). 'filled' lists roles added to complete the role contract that were not in the source research.",
+    "semantic": {
+      "light": { "success": "#15803D", "warning": "#B45309", "error": "#B91C1C", "info": "#1D4ED8" },
+      "dark": { "success": "#4ADE80", "warning": "#FBBF24", "error": "#F87171", "info": "#60A5FA" }
+    }
+  },
+  "palettes": [
+    {
+      "id": "sage-wellness", "name": "Sage Wellness", "group": "natural", "mode": "light",
+      "tags": ["wellness", "organic", "spa", "tea"],
+      "note": "Warm tinted neutral + moss primary + terracotta accent. A brighter terracotta (#C0643F) gives white text only 4.09:1, so it was darkened.",
+      "roles": { "bg": "#F7F5EF", "surface": "#FFFFFF", "border": "#DCD8CC", "border-strong": "#7D8A7F", "text": "#2B3A2F", "text-muted": "#5E6B60", "primary": "#3F6B4E", "on-primary": "#FFFFFF", "accent": "#A9532F", "on-accent": "#FFFFFF" }
+    },
+    {
+      "id": "clay-oat", "name": "Clay & Oat", "group": "natural", "mode": "light",
+      "tags": ["wellness", "food", "editorial", "warm"],
+      "note": "Warm organic. Olive accent is a fill with white text, not a standalone icon/border on oat (below 3:1).",
+      "roles": { "bg": "#FAF6F0", "surface": "#FFFFFF", "border": "#E7DFD3", "border-strong": "#8F8277", "text": "#3A2E26", "text-muted": "#6B5D52", "primary": "#8A4B2E", "on-primary": "#FFFFFF", "accent": "#6B7A3A", "on-accent": "#FFFFFF" }
+    },
+    {
+      "id": "seafoam-spa", "name": "Seafoam Spa", "group": "natural", "mode": "light",
+      "tags": ["spa", "calm", "cool"],
+      "note": "Deliberate near-miss: the terracotta accent fails with white AND with dark text. Use it for large/bold labels and decorative fills only, or darken it.",
+      "roles": { "bg": "#F3F7F6", "surface": "#FFFFFF", "border": "#D5E1DF", "border-strong": "#6F8A88", "text": "#1F3A3D", "text-muted": "#4F6B6E", "primary": "#2D6E6A", "on-primary": "#FFFFFF", "accent": "#B5654A", "on-accent": "#1F3A3D" }
+    },
+    {
+      "id": "moss-dark", "name": "Moss Dark", "group": "natural", "mode": "dark",
+      "tags": ["wellness", "natural", "dark"],
+      "note": "Light sage primary needs dark text; white on it would fail.",
+      "roles": { "bg": "#141A16", "surface": "#1C241F", "surface-2": "#25302A", "border": "#2F3B34", "border-strong": "#6C7C71", "text": "#E4EBE5", "text-muted": "#9AA89E", "primary": "#8FC79A", "on-primary": "#141A16", "accent": "#D9A86C", "on-accent": "#141A16" },
+      "filled": ["border-strong", "on-accent"]
+    },
+    {
+      "id": "midnight-terminal", "name": "Midnight Terminal", "group": "dev-dark", "mode": "dark",
+      "tags": ["dev tool", "github", "dark"],
+      "note": "GitHub Primer dark based. White on #1F6FEB is 4.6:1: AA but thin. Use #58A6FF for link text.",
+      "roles": { "bg": "#0D1117", "surface": "#161B22", "border": "#30363D", "border-strong": "#6E7681", "text": "#E6EDF3", "text-muted": "#8B949E", "primary": "#1F6FEB", "on-primary": "#FFFFFF", "link": "#58A6FF", "success": "#3FB950", "warning": "#D29922", "error": "#F85149" },
+      "filled": ["border-strong"]
+    },
+    {
+      "id": "editor-gray", "name": "Editor Gray", "group": "dev-dark", "mode": "dark",
+      "tags": ["dev tool", "vscode", "dark"],
+      "note": "VS Code Dark Modern based. White on #0078D4 sits right at the 4.5:1 line; the #2B2B2B border is decorative only, so inputs need border-strong.",
+      "roles": { "bg": "#1F1F1F", "surface": "#181818", "surface-2": "#313131", "border": "#2B2B2B", "border-strong": "#6B6B6B", "text": "#CCCCCC", "text-muted": "#9D9D9D", "primary": "#0078D4", "on-primary": "#FFFFFF" },
+      "filled": ["border-strong"]
+    },
+    {
+      "id": "indigo-night", "name": "Indigo Night", "group": "dev-dark", "mode": "dark",
+      "tags": ["saas", "dev tool", "linear-style", "dark"],
+      "note": "Linear-style. A lighter #7C83FF primary would need dark text (white 3.2:1 fails).",
+      "roles": { "bg": "#0B0D12", "surface": "#14171F", "surface-2": "#1C2029", "border": "#2A2F3A", "border-strong": "#656D7E", "text": "#E7E9EE", "text-muted": "#9097A5", "primary": "#5E6AD2", "on-primary": "#FFFFFF", "link": "#A5ACFF" },
+      "filled": ["border-strong"]
+    },
+    {
+      "id": "slate-blue-gray", "name": "Slate Blue-Gray", "group": "dev-dark", "mode": "dark",
+      "tags": ["dev tool", "tailwind", "dark", "blue-gray"],
+      "note": "Tailwind slate dark with sky-400. Classic 'light accent needs dark text' case: white on #38BDF8 is about 2.1:1.",
+      "roles": { "bg": "#0F172A", "surface": "#1E293B", "border": "#334155", "border-strong": "#64748B", "text": "#E2E8F0", "text-muted": "#94A3B8", "primary": "#38BDF8", "on-primary": "#0F172A" },
+      "failcase": { "on-primary": "#FFFFFF" },
+      "filled": ["border-strong"]
+    },
+    {
+      "id": "fintech-navy", "name": "Fintech Navy", "group": "product", "mode": "light",
+      "tags": ["finance", "stripe-inspired", "b2b"],
+      "note": "Always pair gain/loss with +/- and arrows; never color alone.",
+      "roles": { "bg": "#FFFFFF", "surface": "#F6F9FC", "border": "#E3E8EE", "border-strong": "#7B8794", "text": "#0A2540", "text-muted": "#425466", "primary": "#635BFF", "on-primary": "#FFFFFF", "success": "#0E7C4A", "error": "#C2312F" },
+      "filled": ["border", "border-strong"]
+    },
+    {
+      "id": "clinical-care", "name": "Clinical Care", "group": "product", "mode": "light",
+      "tags": ["health", "medical", "aaa-friendly"],
+      "note": "Health audiences skew older: target 7:1 body text (AAA). Green accent with white text is a hair above 4.5:1.",
+      "roles": { "bg": "#F8FAFC", "surface": "#FFFFFF", "border": "#D9E2EC", "border-strong": "#7B8794", "text": "#13293D", "text-muted": "#51657A", "primary": "#0E6E8C", "on-primary": "#FFFFFF", "accent": "#2F855A", "on-accent": "#FFFFFF" },
+      "filled": ["border", "border-strong"]
+    },
+    {
+      "id": "commerce-bold", "name": "Commerce Bold", "group": "product", "mode": "light",
+      "tags": ["e-commerce", "cta", "retail"],
+      "note": "Neutral canvas, one isolated CTA hue used nowhere else. A brighter #EA580C gives white only 3.6:1.",
+      "roles": { "bg": "#FFFFFF", "surface": "#F5F5F4", "border": "#E7E5E4", "border-strong": "#78716C", "text": "#1C1917", "text-muted": "#57534E", "primary": "#C2410C", "on-primary": "#FFFFFF", "success": "#15803D" },
+      "filled": ["border", "border-strong"]
+    },
+    {
+      "id": "saas-indigo", "name": "SaaS Indigo", "group": "product", "mode": "light",
+      "tags": ["saas", "b2b", "tailwind"],
+      "note": "Indigo primary is fine; the sky accent fails with white text. Sky-500 (#0EA5E9) is 2.8:1 on white, failing even 3:1.",
+      "roles": { "bg": "#FFFFFF", "surface": "#F8FAFC", "border": "#E2E8F0", "border-strong": "#64748B", "text": "#0F172A", "text-muted": "#475569", "primary": "#4F46E5", "on-primary": "#FFFFFF", "accent": "#0284C7", "on-accent": "#FFFFFF" },
+      "filled": ["border", "border-strong", "on-accent"]
+    },
+    {
+      "id": "editorial-brutalist", "name": "Editorial Brutalist", "group": "agency", "mode": "light",
+      "tags": ["agency", "portfolio", "brutalist"],
+      "note": "The orange accent fails 3:1 on paper, so accent buttons REQUIRE a 2px #111 border; the border does the contrast work. Shared semantic greens/ambers (tuned for white) land at 4.4:1 on this tinted paper, so success/warning are darkened here: tinted backgrounds need their own semantic check.",
+      "roles": { "bg": "#F2F0E9", "surface": "#FBFAF6", "border": "#D9D5C7", "border-strong": "#111111", "text": "#111111", "text-muted": "#55524A", "primary": "#2340FF", "on-primary": "#FFFFFF", "accent": "#FF5A1F", "on-accent": "#111111", "success": "#0D7C3A", "warning": "#B04F01" },
+      "filled": ["surface", "border", "success", "warning"]
+    },
+    {
+      "id": "portfolio-ember", "name": "Portfolio Ember", "group": "agency", "mode": "dark",
+      "tags": ["portfolio", "agency", "warm", "dark"],
+      "note": "Rich dark + warm amber. One accent, used as fill with dark text or as text on the dark canvas.",
+      "roles": { "bg": "#121110", "surface": "#1C1A18", "border": "#2C2926", "border-strong": "#6E675E", "text": "#EDE8E1", "text-muted": "#A39C92", "primary": "#E8B04A", "on-primary": "#121110", "accent": "#E8B04A", "on-accent": "#121110" },
+      "filled": ["border", "border-strong", "primary", "on-primary"]
+    },
+    {
+      "id": "playful-creator", "name": "Playful Creator", "group": "agency", "mode": "light",
+      "tags": ["creator", "kids", "playful", "triadic"],
+      "note": "Amber works as a fill with dark text, never as a standalone icon or border on cream (2.1:1).",
+      "roles": { "bg": "#FFFBF5", "surface": "#FFFFFF", "border": "#EADFF2", "border-strong": "#8A7AA0", "text": "#2A1E3B", "text-muted": "#5B4A70", "primary": "#7C3AED", "on-primary": "#FFFFFF", "accent": "#F59E0B", "on-accent": "#2A1E3B" },
+      "filled": ["surface", "border", "border-strong", "text-muted"]
+    }
+  ]
+}

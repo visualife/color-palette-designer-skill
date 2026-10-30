@@ -1,0 +1,4 @@
+schema_version: "1.1"
+name: fix-washed-orange-cta
+expected_outcome: |
+  Darkens the orange by changing lightness only (hue preserved), verifies white text reaches at least 4.5:1, reports the new hex with before/after ratios, and explains the cause (mid-lightness high-chroma accent).

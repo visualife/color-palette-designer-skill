@@ -1,0 +1,4 @@
+schema_version: "1.1"
+name: dark-mode-retrofit
+expected_outcome: |
+  A separate dark mapping (not an inversion) that passes the dark-mode rules: bg L 0.13-0.24, text not pure white, elevation by lighter surfaces, lighter desaturated primary with correct on-primary, status colors re-tuned to pass 4.5:1 on dark, pasteable CSS with prefers-color-scheme and a data-theme override.

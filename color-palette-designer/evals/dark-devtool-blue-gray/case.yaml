@@ -1,0 +1,4 @@
+schema_version: "1.1"
+name: dark-devtool-blue-gray
+expected_outcome: |
+  Light and dark role sets with dark bg L about 0.13-0.24 (not pure black), text not pure white, desaturated lighter accent in dark mode with dark on-primary, all pairs pass AA in both modes, semantic colors in both modes, tokens as CSS with data-theme override.

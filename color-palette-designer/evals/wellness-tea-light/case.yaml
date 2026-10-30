@@ -1,0 +1,4 @@
+schema_version: "1.1"
+name: wellness-tea-light
+expected_outcome: |
+  A role-based light palette with warm tinted neutrals and an earthy primary/accent, every text and UI pair verified against WCAG 2.2 AA with the engine, delivered as CSS custom properties with hover/focus/disabled states.
