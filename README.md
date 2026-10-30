@@ -6,6 +6,8 @@ A Claude skill that designs, validates and ships web color palettes. Every color
 
 **[Live demo](https://www.ailive.fr/color-palette-designer-skill/)** · [Download the skill](color-palette-designer.skill) · Created by [Ailive.fr](https://ailive.fr)
 
+<p align="center"><img src="screenshot.png" alt="Color Palette Lab demo: palette, conformance and state-mix toolbar above a live sample UI in the Midnight Terminal dark palette" width="100%"></p>
+
 ## What it does
 
 - **Generates** light and dark palettes from a brief (brand color, mood, industry) with a 50–950 ramp, tinted neutrals, one action hue and an optional accent.
