@@ -23,8 +23,8 @@
 <style>
 :root{
   /* flat neutral grey shell; blue is desaturated (OKLCH C 0.035) */
-  --sh-bg:#2b2b2b; --sh-panel:#353535; --sh-panel-2:#303030; --sh-border:#4d4d4d; --sh-border-soft:#3f3f3f;
-  --sh-text:#c4c4c4; --sh-strong:#ececec; --sh-mute:#a8a8a8; --sh-accent:#9aaabf; --sh-pressed:#4a5058;
+  --sh-bg:#1a1a1a; --sh-panel:#262626; --sh-panel-2:#202020; --sh-border:#3d3d3d; --sh-border-soft:#2e2e2e;
+  --sh-text:#b8b8b8; --sh-strong:#e6e6e6; --sh-mute:#9a9a9a; --sh-accent:#9aaabf; --sh-pressed:#3e444c;
   --sh-pass:#6dbb70; --sh-fail:#f0736b; --sh-warn:#d4a23a;
   --mono:ui-monospace,SFMono-Regular,"SF Mono",Menlo,Consolas,monospace;
   --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Inter,Roboto,Helvetica,Arial,sans-serif;
@@ -44,6 +44,26 @@ select,button,input{font:inherit;color:var(--sh-strong)}
 select{width:100%;background:var(--sh-panel);border:1px solid var(--sh-border);border-radius:6px;padding:7px 8px}
 :focus-visible{outline:2px solid var(--sh-accent);outline-offset:2px}
 input[type=range]{width:100%;accent-color:var(--sh-accent)}
+/* Lightroom-style sliders: the track shows what the slider changes */
+input[type=range].lr{-webkit-appearance:none;appearance:none;background:transparent;height:18px;margin:0;padding:0;cursor:pointer}
+input[type=range].lr::-webkit-slider-runnable-track{box-sizing:border-box;height:3px;border-radius:2px;background:var(--track,#555)}
+input[type=range].lr::-moz-range-track{box-sizing:border-box;height:3px;border-radius:2px;background:var(--track,#555)}
+input[type=range].lr::-webkit-slider-thumb{-webkit-appearance:none;box-sizing:border-box;width:16px;height:16px;margin-top:-6.5px;border-radius:50%;background:#222;border:2px solid #c8c8c8}
+input[type=range].lr::-moz-range-thumb{box-sizing:border-box;width:16px;height:16px;border-radius:50%;background:#222;border:2px solid #c8c8c8}
+input[type=range].lr:hover::-webkit-slider-thumb{border-color:#fff}
+input[type=range].lr:hover::-moz-range-thumb{border-color:#fff}
+.sl{margin:11px 0}
+.sl .row{margin-bottom:3px}
+.sl .row span{color:var(--sh-text)}
+.tgt{display:grid;grid-template-columns:1fr 1fr;gap:0;border:1px solid var(--sh-border);border-radius:6px;overflow:hidden}
+.tgt button{background:var(--sh-bg);border:0;padding:7px 8px;cursor:pointer;font-size:12px;color:var(--sh-mute)}
+.tgt button+button{border-left:1px solid var(--sh-border)}
+.tgt button[aria-pressed=true]{background:var(--sh-pressed);color:#fff}
+#f-acc[hidden]{display:block;visibility:hidden}
+#mode-note{min-height:36px}
+#target-note{min-height:36px}
+html{scrollbar-gutter:stable}
+aside{scrollbar-gutter:stable}
 .row{display:flex;justify-content:space-between;gap:8px;align-items:center;font-size:12px}
 .row output{font-family:var(--mono);color:var(--sh-strong)}
 .seg{display:flex;flex-wrap:wrap;gap:4px}
@@ -64,7 +84,7 @@ td{padding:6px 8px;border-bottom:1px solid var(--sh-border-soft);vertical-align:
 .badge{font:600 11px var(--mono);padding:2px 7px;border-radius:99px;display:inline-block}
 .b-AAA,.b-AA{background:#1f3a27;color:#8be598} .b-UI{background:#3d3418;color:#e8bd5f} .b-FAIL{background:#4a2421;color:#ff9a92}
 .ok{color:var(--sh-pass)} .bad{color:var(--sh-fail);font-weight:600}
-pre{margin:0;background:#242424;border:1px solid var(--sh-border-soft);border-radius:8px;padding:12px;overflow:auto;max-height:340px;font:12px/1.5 var(--mono);color:var(--sh-strong)}
+pre{margin:0;background:#151515;border:1px solid var(--sh-border-soft);border-radius:8px;padding:12px;overflow:auto;max-height:340px;font:12px/1.5 var(--mono);color:var(--sh-strong)}
 .btn{background:var(--sh-panel);border:1px solid var(--sh-border);border-radius:6px;padding:5px 10px;cursor:pointer;font-size:12px}
 .btn:hover{border-color:var(--sh-accent)}
 .btn:active{background:var(--sh-pressed)}
@@ -92,7 +112,10 @@ a{color:var(--sh-accent)}
 .toolbar{display:flex;gap:16px 22px;flex-wrap:wrap;align-items:flex-end;background:var(--sh-panel);border:1px solid var(--sh-border-soft);border-radius:10px;padding:12px 14px}
 .toolbar .tb-pal{flex:1 1 280px;max-width:420px}
 .toolbar .lbl{margin-bottom:5px}
-.toolbar .note{align-self:center;font-family:var(--mono)}
+.toolbar>.note{align-self:center;font-family:var(--mono)}
+.copyall{flex:1 1 100%;display:flex;align-items:center;gap:12px;border-top:1px solid var(--sh-border-soft);padding-top:12px;margin-top:-2px}
+.copyall .btn{flex:none;background:var(--sh-pressed);border-color:var(--sh-accent);color:#fff;padding:7px 10px}
+.copyall .note{font-size:12px;line-height:1.35}
 
 /* folded sections (closed by default) */
 details.fold>summary{cursor:pointer;color:var(--sh-mute);font-size:12px;padding:6px 0;list-style:none;display:flex;gap:8px;align-items:center;user-select:none}
@@ -142,6 +165,29 @@ tr.edited td:first-child{box-shadow:inset 3px 0 0 var(--sh-accent)}
 .pv .b-g{background:transparent;color:var(--link)}
 .pv .b-g:hover,.pv .b-g.is-hover{background:var(--surface-2)}
 .pv .b-a{background:var(--accent);color:var(--on-accent)}
+.pv .b{transition:background .12s,border-color .12s}
+.pv .b-s:active,.pv .b-s.is-active{background:color-mix(in oklab,var(--surface-2),var(--text) 8%)}
+.pv .b-s2{background:var(--surface-2);color:var(--text)}
+.pv .b-s2:hover,.pv .b-s2.is-hover{background:color-mix(in oklab,var(--surface-2),var(--text) 6%)}
+.pv .b-s2:active,.pv .b-s2.is-active{background:color-mix(in oklab,var(--surface-2),var(--text) 12%)}
+.pv .b-t{background:transparent;color:var(--text)}
+.pv .b-t:hover,.pv .b-t.is-hover{background:var(--surface-2)}
+.pv .b-t:active,.pv .b-t.is-active{background:color-mix(in oklab,var(--surface-2),var(--text) 8%)}
+.pv .b-s:disabled{background:var(--surface);border-color:var(--border);color:var(--text-muted);opacity:.7}
+.pv .b-s2:disabled{background:var(--surface-2);color:var(--text-muted);opacity:.7}
+.pv .b-t:disabled{background:transparent;color:var(--text-muted);opacity:.7}
+.pv .b.is-loading{pointer-events:none}
+.pv .spin{width:13px;height:13px;border:2px solid currentColor;border-right-color:transparent;border-radius:50%;animation:pvspin .8s linear infinite;display:inline-block}
+@keyframes pvspin{to{transform:rotate(360deg)}}
+@media (prefers-reduced-motion:reduce){.pv .spin{animation-duration:2.4s}}
+.pv .hier-wrap{overflow-x:auto}
+.pv .hier{display:grid;grid-template-columns:78px repeat(4,minmax(116px,1fr));gap:10px;align-items:center;min-width:560px;border:1px dashed var(--border-strong);border-radius:10px;padding:14px}
+.pv .hier .hh{font:600 12px var(--sans);color:var(--text-muted);text-align:left}
+.pv .hier .hr{font:12px var(--sans);color:var(--text-muted)}
+.pv .hier .b{width:100%;justify-content:space-between}
+.pv .grid-states{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:18px 14px;max-width:640px}
+.pv .grid-states small{display:block;color:var(--text-muted);font-size:12px;margin:0 0 6px;font-style:italic}
+.pv .grid-states .b{width:100%;justify-content:center}
 .pv .b:focus-visible,.pv .is-focus,.pv .tgl:focus-visible,.pv [role=tab]:focus-visible,.pv [role=radio]:focus-visible,.pv .xbtn:focus-visible{outline:2px solid var(--focus-ring);outline-offset:2px}
 .pv .b:disabled{background:var(--disabled);color:var(--text-muted);cursor:not-allowed}
 .pv .sec{padding:26px 22px;border-top:1px solid var(--border)}
@@ -161,9 +207,9 @@ tr.edited td:first-child{box-shadow:inset 3px 0 0 var(--sh-accent)}
 .pv .errmsg,.pv .okmsg{font-size:13px;margin-top:5px;display:flex;gap:6px;align-items:center;font-weight:600}
 .pv .errmsg{color:var(--error)} .pv .okmsg{color:var(--success)}
 .pv .alerts{display:grid;gap:8px}
-.pv .al{display:flex;gap:10px;align-items:flex-start;padding:10px 12px;border-radius:8px;background:var(--t,var(--surface));border:1px solid var(--border);border-left:4px solid currentColor;font-size:14px}
+.pv .al{display:flex;gap:10px;align-items:center;padding:11px 14px;border-radius:10px;background:var(--t,var(--surface));border:1px solid color-mix(in oklab,currentColor 28%,var(--t,var(--surface)));font-size:14px}
 .pv .al[hidden]{display:none}
-.pv .al b{font-weight:700;color:var(--text)}.pv .al span{color:var(--text);flex:1}
+.pv .al b{font-weight:700;color:inherit}.pv .al span{color:var(--text);flex:1}.pv .al .xbtn{color:inherit}
 .pv .al svg{flex:none;margin-top:2px}
 .pv .al.s{color:var(--success);--t:var(--tint-success)}.pv .al.w{color:var(--warning);--t:var(--tint-warning)}.pv .al.e{color:var(--error);--t:var(--tint-error)}.pv .al.i{color:var(--info);--t:var(--tint-info)}
 .pv .xbtn{background:transparent;border:0;color:var(--text);font-size:18px;line-height:1;cursor:pointer;border-radius:6px;padding:0 6px}
@@ -216,15 +262,21 @@ tr.edited td:first-child{box-shadow:inset 3px 0 0 var(--sh-accent)}
     </div>
   </div>
 
-  <div class="field" id="failwrap" hidden><label class="chk"><input type="checkbox" id="fail"> Apply deliberate failure case</label><div class="note" id="failnote"></div></div>
 
-  <h3 style="margin-top:22px">Generator</h3>
-  <p class="note">Moving any slider switches to a live generated palette (both modes, contrast-solved).</p>
-  <div class="field"><div class="row"><span>Hue</span><output id="o-hue"></output></div><input type="range" id="g-hue" min="0" max="360" step="1" value="155"></div>
-  <div class="field"><div class="row"><span>Chroma</span><output id="o-chroma"></output></div><input type="range" id="g-chroma" min="0.02" max="0.26" step="0.005" value="0.07"></div>
-  <div class="field"><div class="row"><span>Neutral hue</span><output id="o-nhue"></output></div><input type="range" id="g-nhue" min="0" max="360" step="1" value="95"></div>
-  <div class="field"><div class="row"><span>Neutral chroma</span><output id="o-nchroma"></output></div><input type="range" id="g-nchroma" min="0" max="0.05" step="0.001" value="0.010"></div>
-  <div class="field"><label class="chk"><input type="checkbox" id="g-acc" checked> Accent</label><div class="row"><span>Accent offset</span><output id="o-acc"></output></div><input type="range" id="g-off" min="-180" max="180" step="5" value="-110"></div>
+  <h3 style="margin-top:22px">Colors</h3>
+  <p class="note" id="gen-note">Sliders start from the selected palette and adjust it. Pick &#9733; Generated to build one from scratch. Double-click a slider to reset it.</p>
+  <div class="field"><span class="lbl">Edit</span>
+    <div class="tgt" id="seg-target"><button data-v="bg" aria-pressed="true">Background</button><button data-v="comp" aria-pressed="false">Components</button></div>
+    <div class="note" id="target-note" style="margin-top:6px"></div>
+  </div>
+  <div class="sl"><div class="row"><span>Hue</span><output id="o-hue"></output></div><input type="range" class="lr" id="g-hue" min="0" max="360" step="1" value="95"></div>
+  <div class="sl"><div class="row"><span>Chroma</span><output id="o-chroma"></output></div><input type="range" class="lr" id="g-chroma" min="0" max="0.05" step="0.001" value="0.010"></div>
+  <div class="sl"><div class="row"><span>Saturation</span><output id="o-sat"></output></div><input type="range" class="lr" id="g-sat" min="0" max="200" step="1" value="100"></div>
+  <div class="sl"><div class="row"><span>Exposure</span><output id="o-exp"></output></div><input type="range" class="lr" id="g-exp" min="-2" max="2" step="0.05" value="0"></div>
+  <div class="sl"><div class="row"><span>Gamma</span><output id="o-gamma"></output></div><input type="range" class="lr" id="g-gamma" min="0.5" max="2.5" step="0.05" value="1"></div>
+  <div class="field" id="f-acc"><label class="chk"><input type="checkbox" id="g-acc" checked> Accent</label><div class="sl" style="margin:0"><div class="row"><span>Accent offset</span><output id="o-acc"></output></div><input type="range" class="lr" id="g-off" min="-180" max="180" step="5" value="-110"></div></div>
+  <button class="btn" id="g-reset" style="margin-top:6px">Reset this group</button>
+  <div class="field" id="failwrap" hidden><label class="chk"><input type="checkbox" id="fail"> Apply deliberate failure case</label><div class="note" id="failnote"></div></div>
 </aside>
 
 <main>
@@ -235,6 +287,7 @@ tr.edited td:first-child{box-shadow:inset 3px 0 0 var(--sh-accent)}
     <div><span class="lbl">State mixes</span>
       <div class="seg" id="seg-sp"><button data-v="subtle" aria-pressed="false">Subtle</button><button data-v="standard" aria-pressed="true">Standard</button><button data-v="strong" aria-pressed="false">Strong</button></div></div>
     <span class="note" id="sp-note"></span>
+    <div class="copyall"><button class="btn" id="copy-all">Copy all</button><div class="note">Paste code in your AI, it will generate the instructions, no API calls</div></div>
   </div>
 
   <section class="frame">
@@ -250,12 +303,18 @@ tr.edited td:first-child{box-shadow:inset 3px 0 0 var(--sh-accent)}
         <div class="cardu"><span class="tag">New</span><h3>Layered surfaces</h3><p>Elevation comes from lightness steps, not shadows alone.</p></div>
         <div class="cardu"><span class="tag">Muted text</span><h3>Secondary copy</h3><p>Muted text still reaches 4.5:1 on every surface it sits on.</p></div>
         <div class="cardu"><button class="b b-a" style="margin-bottom:8px">Accent fill</button><p>Accent as a fill with its own on-accent text color.</p></div></div></div>
-      <div class="sec"><h2>Button states (hover, press and tab to the real ones)</h2><div class="states">
-        <div><button class="b b-p">Default</button><small>default</small></div>
-        <div><button class="b b-p is-hover">Hover</button><small id="sm-h">mix</small></div>
-        <div><button class="b b-p is-active">Active</button><small id="sm-a">mix</small></div>
-        <div><button class="b b-p is-focus">Focus</button><small>2px ring</small></div>
-        <div><button class="b b-p" disabled>Disabled</button><small id="sm-d">mixed to bg</small></div></div></div>
+      <div class="sec"><h2>Color hierarchy</h2>
+        <p class="lead" style="margin:0 0 14px;max-width:520px">Color communicates importance and state, not decoration. Primary uses the highest contrast; only one per view.</p>
+        <div class="hier-wrap"><div class="hier" id="hier"></div></div></div>
+      <div class="sec"><h2>Color in UI states (hover, press and tab to the real ones)</h2>
+        <p class="lead" style="margin:0 0 14px;max-width:520px">Colors that communicate interaction: what happens when someone touches or uses something.</p>
+        <div class="grid-states">
+        <div><small>Default</small><button class="b b-p">Submit</button></div>
+        <div><small id="sm-h">Hover</small><button class="b b-p is-hover">Submit</button></div>
+        <div><small id="sm-a">Pressed</small><button class="b b-p is-active">Submit</button></div>
+        <div><small>Focused: 2px ring</small><button class="b b-p is-focus">Submit</button></div>
+        <div><small>Loading</small><button class="b b-p is-loading" aria-busy="true"><span class="spin" aria-hidden="true"></span>Loading…</button></div>
+        <div><small id="sm-d">Disabled</small><button class="b b-p" disabled>Submit</button></div></div></div>
       <div class="sec"><h2>Interactive components (selected states use the solved tint)</h2>
         <div class="tgl-row"><button class="tgl" id="tgl" role="switch" aria-checked="false" aria-labelledby="tgl-l"><span class="k"></span></button><span id="tgl-l">Email me restock alerts: <b id="tgl-s">off</b></span></div>
         <div class="tabs" role="tablist" id="tabs">
@@ -271,11 +330,11 @@ tr.edited td:first-child{box-shadow:inset 3px 0 0 var(--sh-accent)}
         <label class="f" for="e1">Email (type to validate)</label><input class="inp err" id="e1" value="hello@" aria-invalid="true" aria-describedby="e1m" autocomplete="off">
         <div id="e1m" aria-live="polite"></div>
         <div style="height:12px"></div><label class="f" for="e2">Postcode</label><input class="inp" id="e2" value="75017"><div class="help">Border uses border-strong (3:1), not the decorative border.</div></div>
-      <div class="sec"><h2><span>Status (dismissible)</span><button class="b b-g" id="restore" style="padding:2px 8px;font-size:12px" hidden>Restore all</button></h2><div class="alerts" id="alerts">
-        <div class="al s"><svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path d="M8 1a7 7 0 1 0 0 14A7 7 0 0 0 8 1Zm-1 10L4 8l1-1 2 2 4-4 1 1-5 5Z"/></svg><span><b>Success.</b> Order confirmed.</span><button class="xbtn" aria-label="Dismiss">&times;</button></div>
+      <div class="sec"><h2><span>Color in feedback states (dismissible)</span><button class="b b-g" id="restore" style="padding:2px 8px;font-size:12px" hidden>Restore all</button></h2><div class="alerts" id="alerts">
+        <div class="al i"><svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path d="M8 1a7 7 0 1 0 0 14A7 7 0 0 0 8 1Zm-.75 3h1.5v1.5h-1.5V4Zm0 3h1.5v5h-1.5V7Z"/></svg><span><b>Info.</b> Free shipping over 60.</span><button class="xbtn" aria-label="Dismiss">&times;</button></div>
         <div class="al w"><svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path d="M8 1 15 14H1L8 1Zm-.75 5v4h1.5V6h-1.5Zm0 5v1.5h1.5V11h-1.5Z"/></svg><span><b>Warning.</b> Stock is running low.</span><button class="xbtn" aria-label="Dismiss">&times;</button></div>
-        <div class="al e"><svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path d="M8 1a7 7 0 1 0 0 14A7 7 0 0 0 8 1Zm3 9-1 1-2-2-2 2-1-1 2-2-2-2 1-1 2 2 2-2 1 1-2 2 2 2Z"/></svg><span><b>Error.</b> Payment declined.</span><button class="xbtn" aria-label="Dismiss">&times;</button></div>
-        <div class="al i"><svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path d="M8 1a7 7 0 1 0 0 14A7 7 0 0 0 8 1Zm-.75 3h1.5v1.5h-1.5V4Zm0 3h1.5v5h-1.5V7Z"/></svg><span><b>Info.</b> Free shipping over 60.</span><button class="xbtn" aria-label="Dismiss">&times;</button></div></div></div>
+        <div class="al s"><svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path d="M8 1a7 7 0 1 0 0 14A7 7 0 0 0 8 1Zm-1 10L4 8l1-1 2 2 4-4 1 1-5 5Z"/></svg><span><b>Success.</b> Order confirmed.</span><button class="xbtn" aria-label="Dismiss">&times;</button></div>
+        <div class="al e"><svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path d="M8 1a7 7 0 1 0 0 14A7 7 0 0 0 8 1Zm3 9-1 1-2-2-2 2-1-1 2-2-2-2 1-1 2 2 2-2 1 1-2 2 2 2Z"/></svg><span><b>Error.</b> Payment declined.</span><button class="xbtn" aria-label="Dismiss">&times;</button></div></div></div>
       <div class="sec"><h2>Chart with Okabe-Ito categorical set (direct labels)</h2>
         <div class="bars" id="bars"></div><div class="legend" id="legend"></div></div>
       <div class="foot">Footer text uses text-muted on surface. <a href="#" onclick="return false">Privacy</a></div>
@@ -992,20 +1051,87 @@ const groups = {natural:'Natural / wellness / organic','dev-dark':'Dark develope
   sel.innerHTML = html; sel.value = state.id;
 })();
 
+// ---- generator params, per group (bg = neutrals, comp = components) ----
+const BG_ROLES = ['bg','surface','surface-2','border','border-strong','text','text-muted'];
+const HUE_ROLES = ['primary','accent','link','focus-ring'];
+const CHROMA_SPEC = { bg:[0,0.05,0.001], comp:[0,0.30,0.005] };
+const INIT = { bg:{hue:95,chroma:0.010,sat:100,exp:0,gamma:1}, comp:{hue:155,chroma:0.07,sat:100,exp:0,gamma:1,off:-110,acc:true} };
+const DEFS = { sat:100, exp:0, gamma:1 };
+const clone = (o)=>JSON.parse(JSON.stringify(o));
+const wrap = (h)=>((h%360)+360)%360;
+const snap = (v,lo,hi,st)=>+(Math.round(Math.min(hi,Math.max(lo,v))/st)*st).toFixed(4);
+let P = clone(INIT);   // current slider values
+let P0 = null;         // seed read from the selected preset (null while Generated)
+state.target = 'bg';
+
+function baseRoles(p){
+  const sem = DATA._meta.semantic[p.mode]||{};
+  const base = { ...p.roles }; for (const k in sem) if (!(k in base)) base[k] = sem[k];
+  return base;
+}
+function seedFromRoles(r){
+  const neu = [r.bg,r.surface,r['surface-2'],r.text].filter(Boolean).map(hexToOklch).sort((a,b)=>b.c-a.c)[0];
+  const prim = hexToOklch(r.primary||r.link||r.bg);
+  let off = -110, acc = false;
+  if (r.accent){ let d = wrap(hexToOklch(r.accent).h - prim.h); if (d>180) d-=360; off = snap(d,-180,180,5); acc = true; }
+  const [bl,bh,bs] = CHROMA_SPEC.bg, [cl,ch,cs] = CHROMA_SPEC.comp;
+  return {
+    bg:{hue:Math.round(neu.h)%360, chroma:snap(neu.c,bl,bh,bs), sat:100, exp:0, gamma:1},
+    comp:{hue:Math.round(prim.h)%360, chroma:snap(prim.c,cl,ch,cs), sat:100, exp:0, gamma:1, off, acc},
+  };
+}
+// Selecting a preset: seed the sliders from ITS colors, so every change starts from what is on screen.
+function reseed(){
+  if (state.id === GEN_ID) { P0 = null; return; }
+  const p = DATA.palettes.find(x=>x.id===state.id); if(!p) return;
+  P = seedFromRoles(baseRoles(p)); P0 = clone(P);
+}
+const defOf = (g,k)=> k in DEFS ? DEFS[k] : (P0 ? P0[g][k] : INIT[g][k]);
+const dirty = (g)=> Object.keys(P[g]).some(k=>P[g][k]!==defOf(g,k));
+
+function xform(hex, role, g, p, p0){
+  let {l,c,h} = hexToOklch(hex);
+  if (p0 && (g==='bg' || HUE_ROLES.includes(role))) {
+    const isAcc = role==='accent';
+    const hueOf = (x)=> x.hue + (isAcc ? x.off : 0);
+    const achro = c < 0.003;
+    if (achro) h = wrap(hueOf(p)); else h = wrap(h + hueOf(p) - hueOf(p0));
+    if (achro || p0.chroma < 0.001) c = c + Math.max(0, p.chroma - p0.chroma) * (achro ? 0.8 : 1);
+    else c *= p.chroma / p0.chroma;
+  }
+  c *= p.sat/100;
+  l = Math.min(1, Math.max(0, l)) ** (1/p.gamma);          // gamma: lifts/lowers mid-tones
+  l = Math.min(1, Math.max(0, l * 2 ** (p.exp/3)));          // exposure in stops (OKLab L is ~ cube root of luminance)
+  return oklchToHex({l,c,h});
+}
+function adjustRoles(roles){
+  const out = { ...roles };
+  for (const g of ['bg','comp']) {
+    if (!dirty(g)) continue;
+    for (const k of Object.keys(out)) if ((g==='bg') === BG_ROLES.includes(k)) out[k] = xform(out[k], k, g, P[g], P0 && P0[g]);
+  }
+  return out;
+}
 function genParams(){
-  return { hue:+$('g-hue').value, chroma:+$('g-chroma').value, neutralHue:+$('g-nhue').value, neutralChroma:+$('g-nchroma').value,
-    accentOffset: $('g-acc').checked ? +$('g-off').value : null, aaa: state.conf==='AAA' };
+  return { hue:P.comp.hue, chroma:P.comp.chroma, neutralHue:P.bg.hue, neutralChroma:P.bg.chroma,
+    accentOffset: P.comp.acc ? P.comp.off : null, aaa: state.conf==='AAA' };
 }
 function baseCurrent(){
   if (state.id === GEN_ID) {
-    const gp = genParams(); const pal = generate({...gp, accentChroma: gp.chroma});
+    const gp = genParams(); const raw = generate({...gp, accentChroma: gp.chroma});
+    const pal = { light: adjustRoles(raw.light), dark: adjustRoles(raw.dark) };
     return { name:'Generated', mode:state.mode, roles:pal[state.mode], both:pal, note:`hue ${gp.hue}, chroma ${gp.chroma}, neutral ${gp.neutralHue}/${gp.neutralChroma}${gp.accentOffset===null?'':', accent '+(gp.accentOffset>0?'+':'')+gp.accentOffset}°` };
   }
   const p = DATA.palettes.find(x=>x.id===state.id);
-  const sem = DATA._meta.semantic[p.mode]||{};
-  const base = { ...p.roles }; for (const k in sem) if (!(k in base)) base[k] = sem[k];
-  const roles = (state.fail && p.failcase) ? { ...base, ...p.failcase } : base;
-  return { name:p.name, mode:p.mode, roles, both:null, note:p.note, failcase:p.failcase };
+  let base = baseRoles(p);
+  if (state.fail && p.failcase) base = { ...base, ...p.failcase };
+  if (!P.comp.acc) { delete base.accent; delete base['on-accent']; }
+  else if (!base.accent) {
+    const pr = hexToOklch(base.primary);
+    base.accent = solveL({ l:pr.l, c:pr.c, h:wrap(pr.h + P0.comp.off) }, [base.bg], 4.5, p.mode==='dark'?'lighter':'darker') || base.primary;
+    base['on-accent'] = base['on-primary'];
+  }
+  return { name:p.name, mode:p.mode, roles:adjustRoles(base), both:null, note:p.note, failcase:p.failcase };
 }
 function current(){
   const c = baseCurrent(); const keys = Object.keys(state.over).filter(k=>k in c.roles);
@@ -1210,14 +1336,41 @@ function lab(cur){
   document.querySelectorAll('#lab-a,#lab-b').forEach(e=>e.classList.toggle('gray',$('lab-gray').checked));
 }
 function syncOut(){
-  $('o-hue').textContent=$('g-hue').value+'°'; $('o-chroma').textContent=(+$('g-chroma').value).toFixed(3);
-  $('o-nhue').textContent=$('g-nhue').value+'°'; $('o-nchroma').textContent=(+$('g-nchroma').value).toFixed(3);
-  $('o-acc').textContent=$('g-acc').checked?($('g-off').value+'°'):'off';
+  const p=P[state.target], pc=P.comp;
+  $('o-hue').textContent=p.hue+'°'; $('o-chroma').textContent=p.chroma.toFixed(3);
+  $('o-sat').textContent=p.sat+'%'; $('o-exp').textContent=(p.exp>0?'+':'')+p.exp.toFixed(2)+' EV'; $('o-gamma').textContent=p.gamma.toFixed(2);
+  $('o-acc').textContent=pc.acc?(pc.off+'°'):'off';
 }
-function toGen(){ if(state.id!==GEN_ID){ state.id=GEN_ID; $('pal').value=GEN_ID; state.fail=false; $('fail').checked=false; } }
+const SL = { 'g-hue':'hue','g-chroma':'chroma','g-sat':'sat','g-exp':'exp','g-gamma':'gamma' };
+const TARGET_NOTE = { bg:'Background: bg, surface, surface-2, border, border-strong, text, text-muted.', comp:'Components: primary, accent, link, focus ring, on-colors, status colors.' };
+function loadSliders(){
+  const g=state.target, p=P[g], [lo,hi,st]=CHROMA_SPEC[g];
+  const ch=$('g-chroma'); ch.min=lo; ch.max=hi; ch.step=st;
+  for (const [id,k] of Object.entries(SL)) $(id).value=p[k];
+  $('g-acc').checked=P.comp.acc; $('g-off').value=P.comp.off;
+  $('f-acc').hidden = g!=='comp';
+  $('target-note').textContent = TARGET_NOTE[g];
+  $('seg-target').querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed',String(x.dataset.v===g)));
+  syncOut(); updateTracks();
+}
+// Slider tracks show what each slider does to the group being edited.
+function updateTracks(){
+  const g=state.target, p=P[g], bgT=g==='bg';
+  const st=(n,f)=>Array.from({length:n+1},(_,i)=>f(i/n)).join(',');
+  const grad=(stops)=>`linear-gradient(90deg,${stops})`;
+  const vc = bgT ? 0.09 : 0.15;                      // visualisation chroma (bg is exaggerated so the track reads)
+  const set=(id,v)=>$(id).style.setProperty('--track',v);
+  set('g-hue',  grad(st(12,t=>oklchToHex({l:0.72,c:vc,h:t*360}))));
+  set('g-chroma',grad(st(8,t=>oklchToHex({l:0.72,c:t*(bgT?0.12:0.2),h:p.hue}))));
+  set('g-sat',  grad(st(8,t=>oklchToHex({l:0.72,c:t*2*Math.max(p.chroma,bgT?0.04:0.1),h:p.hue}))));
+  set('g-exp',  grad(st(8,t=>oklchToHex({l:0.06+0.9*t,c:Math.min(vc,0.1)*0.6,h:p.hue}))));
+  set('g-gamma',grad(st(8,t=>oklchToHex({l:0.5**(1/(0.5+2*t)),c:Math.min(vc,0.1)*0.6,h:p.hue}))));
+  set('g-off',  grad(st(12,t=>oklchToHex({l:0.72,c:0.15,h:P.comp.hue-180+360*t}))));
+}
+function onSlider(g,k,v){ P[g][k]=v; state.over={}; syncOut(); updateTracks(); render(); }
 
 // ---- controls ----
-$('pal').addEventListener('change',e=>{ state.id=e.target.value; state.fail=false; state.over={}; $('fail').checked=false; render(); });
+$('pal').addEventListener('change',e=>{ state.id=e.target.value; state.fail=false; state.over={}; $('fail').checked=false; reseed(); loadSliders(); render(); });
 function syncSeg(id,val){ $(id).querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed',String(x.dataset.v===val))); }
 function seg(id,key,after){ $(id).addEventListener('click',e=>{ const b=e.target.closest('button'); if(!b||b.disabled) return;
   state[key]=b.dataset.v; syncSeg(id,b.dataset.v); if(after) after(); render(); }); }
@@ -1225,14 +1378,52 @@ seg('seg-mode','mode',()=>{ state.over={}; }); seg('seg-vision','vision'); seg('
 $('fail').addEventListener('change',e=>{ state.fail=e.target.checked; state.over={}; render(); });
 $('onlyfail').addEventListener('change',render);
 $('lab-gray').addEventListener('change',()=>lab(current()));
-['g-hue','g-chroma','g-nhue','g-nchroma','g-off'].forEach(id=>$(id).addEventListener('input',()=>{ toGen(); state.over={}; syncOut(); render(); }));
-$('g-acc').addEventListener('change',()=>{ toGen(); state.over={}; syncOut(); render(); });
+Object.entries(SL).forEach(([id,k])=>{
+  const el=$(id);
+  el.addEventListener('input',()=>onSlider(state.target,k,+el.value));
+  el.addEventListener('dblclick',()=>{ const v=defOf(state.target,k); el.value=v; onSlider(state.target,k,+v); });
+});
+$('g-off').addEventListener('input',()=>onSlider('comp','off',+$('g-off').value));
+$('g-off').addEventListener('dblclick',()=>{ const v=defOf('comp','off'); $('g-off').value=v; onSlider('comp','off',v); });
+$('g-acc').addEventListener('change',()=>{ P.comp.acc=$('g-acc').checked; state.over={}; syncOut(); render(); });
+$('seg-target').addEventListener('click',e=>{ const b=e.target.closest('button'); if(!b) return; state.target=b.dataset.v; loadSliders(); });
+$('g-reset').addEventListener('click',()=>{ const g=state.target; for (const k of Object.keys(P[g])) P[g][k]=defOf(g,k); state.over={}; loadSliders(); render(); });
 
 // ---- export ----
 function download(name,text,type){ const a=document.createElement('a'); a.href=URL.createObjectURL(new Blob([text],{type})); a.download=name; document.body.appendChild(a); a.click(); a.remove(); setTimeout(()=>URL.revokeObjectURL(a.href),1000); }
 $('copy').addEventListener('click',async()=>{ toast((await copyText($('css').textContent)) ? 'CSS copied' : 'Copy failed'); });
 $('dl-css').addEventListener('click',()=>{ const c=current(); download(`palette-${state.id}-${c.both?state.mode:c.mode}.css`, $('css').textContent, 'text/css'); });
 $('dl-json').addEventListener('click',()=>{ const c=current(); download(`palette-${state.id}-${c.both?state.mode:c.mode}.tokens.json`, JSON.stringify(toDtcg(c.roles),null,2), 'application/design-tokens+json'); });
+$('copy-all').addEventListener('click',async()=>{
+  const c=current(), mode=c.both?state.mode:c.mode; writeHash();
+  const gp=(g)=>({...P[g]});
+  const settings={
+    palette:{id:state.id,name:c.name,mode,note:c.note||''},
+    conformance:state.conf, stateMixPreset:state.sp, areaSplitPreset:state.ap, visionPreview:state.vision,
+    adjustments:{background:gp('bg'),components:gp('comp'),seededFromPreset:P0?{background:P0.bg,components:P0.comp}:null,
+      units:'hue deg (OKLCH), chroma OKLCH, saturation %, exposure in stops (EV), gamma power on lightness'},
+    manualEdits:{...state.over},
+    roles:Object.fromEntries(Object.entries(c.roles).map(([k,v])=>[k,{hex:v,oklch:oklchOf(v)}])),
+    contrast:audit(c.roles,{aaa:state.conf==='AAA'}).map(r=>({pair:r.fg+' on '+r.bg,ratio:+r.ratio.toFixed(2),need:r.need,pass:r.pass}))
+  };
+  const text=`I designed a UI color palette in the Color Palette Lab (Ailive.fr). Use the settings below to write clear, step-by-step instructions for implementing it in my project: CSS custom properties, light/dark handling, button hierarchy (primary, secondary, outline, tertiary), UI states (hover, pressed, focus, loading, disabled) and feedback colors (info, warning, success, error). Keep every hex value exactly as given and flag any contrast pair that fails.
+
+## Settings (JSON)
+${JSON.stringify(settings,null,2)}
+
+## CSS custom properties
+${$('css').textContent}
+
+## State mixes
+:root {
+${stateCss(fillView(c.roles),state.sp)}
+}
+
+## Link to this exact state
+${location.href}
+`;
+  toast((await copyText(text)) ? 'Copied: paste it into your AI' : 'Copy failed');
+});
 $('copy-link').addEventListener('click',async()=>{ writeHash(); toast((await copyText(location.href)) ? 'Link copied' : 'Copy failed'); });
 
 // ---- URL hash (shareable state) ----
@@ -1240,7 +1431,8 @@ function writeHash(){
   try{
     const p=new URLSearchParams();
     p.set('p',state.id); p.set('m',state.mode); p.set('c',state.conf); p.set('s',state.sp); p.set('v',state.vision); p.set('a',state.ap);
-    if(state.id===GEN_ID) p.set('g',[$('g-hue').value,$('g-chroma').value,$('g-nhue').value,$('g-nchroma').value,$('g-acc').checked?$('g-off').value:'x'].join(','));
+    const q=(x)=>[x.hue,x.chroma,x.sat,x.exp,x.gamma];
+    p.set('g2',[...q(P.bg),...q(P.comp),P.comp.acc?P.comp.off:'x'].join(','));
     const o=Object.entries(state.over).map(([k,v])=>k+':'+v.replace('#','')).join(',');
     if(o) p.set('o',o);
     history.replaceState(null,'','#'+p.toString());
@@ -1249,13 +1441,16 @@ function writeHash(){
 function readHash(){
   try{
     const p=new URLSearchParams(location.hash.slice(1)); if(![...p.keys()].length) return;
-    const id=p.get('p'); if(id && (id===GEN_ID || DATA.palettes.some(x=>x.id===id))) { state.id=id; $('pal').value=id; }
+    const id=p.get('p'); if(id && (id===GEN_ID || DATA.palettes.some(x=>x.id===id))) { state.id=id; $('pal').value=id; reseed(); }
     if(['light','dark'].includes(p.get('m'))) state.mode=p.get('m');
     if(['AA','AAA'].includes(p.get('c'))) { state.conf=p.get('c'); syncSeg('seg-conf',state.conf); }
     if(STATE_PRESETS[p.get('s')]) { state.sp=p.get('s'); syncSeg('seg-sp',state.sp); }
     if(['none','protan','deutan','tritan','gray'].includes(p.get('v'))) { state.vision=p.get('v'); syncSeg('seg-vision',state.vision); }
     if(AREA_PRESETS[p.get('a')]) { state.ap=p.get('a'); $('ap').value=state.ap; setSplit(...AREA_PRESETS[state.ap].split,0); }
-    const g=p.get('g'); if(g){ const [h,c,nh,nc,off]=g.split(','); $('g-hue').value=h; $('g-chroma').value=c; $('g-nhue').value=nh; $('g-nchroma').value=nc; if(off==='x') $('g-acc').checked=false; else { $('g-acc').checked=true; $('g-off').value=off; } }
+    const g=p.get('g'); if(g){ const [h,c,nh,nc,off]=g.split(','); P.comp.hue=+h; P.comp.chroma=+c; P.bg.hue=+nh; P.bg.chroma=+nc; if(off==='x') P.comp.acc=false; else { P.comp.acc=true; P.comp.off=+off; } }
+    const g2=p.get('g2'); if(g2){ const a=g2.split(','); if(a.length===11){ const n=a.slice(0,10).map(Number);
+      if(n.every(Number.isFinite)){ ['hue','chroma','sat','exp','gamma'].forEach((k,i)=>{ P.bg[k]=n[i]; P.comp[k]=n[i+5]; });
+        if(a[10]==='x') P.comp.acc=false; else if(Number.isFinite(+a[10])) { P.comp.acc=true; P.comp.off=+a[10]; } } } }
     const o=p.get('o'); if(o) o.split(',').forEach(t=>{ const [k,v]=t.split(':'); if(k && /^[0-9a-f]{6}$/i.test(v||'')) state.over[k]='#'+v.toUpperCase(); });
     syncSeg('seg-mode',state.mode);
   }catch(_){}
@@ -1288,7 +1483,15 @@ $('tgl').addEventListener('click',()=>{ const t=$('tgl'); const on=t.getAttribut
   $('restore').addEventListener('click',()=>{ als.forEach(a=>a.hidden=false); upd(); });
 })();
 
-readHash(); syncOut(); render();
+reseed(); (function(){
+  const caret='<svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M2.5 4.5 6 8l3.5-3.5"/></svg>';
+  const cols=[['Primary','b-p'],['Secondary','b-s2'],['Outline','b-s'],['Tertiary','b-t']];
+  const rowsH=[['Default',''],['Hover','is-hover'],['Pressed','is-active'],['Disabled','dis']];
+  let h='<span></span>'+cols.map(c=>`<span class="hh">${c[0]}</span>`).join('');
+  for(const [rn,rc] of rowsH){ h+=`<span class="hr">${rn}</span>`+cols.map(c=>`<button class="b ${c[1]} ${rc==='dis'?'':rc}"${rc==='dis'?' disabled':''}>${caret}Button${caret}</button>`).join(''); }
+  $('hier').innerHTML=h;
+})();
+reseed(); readHash(); loadSliders(); render();
 })();
 </script>
 </body>

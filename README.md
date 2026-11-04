@@ -6,7 +6,7 @@ A Claude skill that designs, validates and ships web color palettes. Every color
 
 **[Live demo](https://www.ailive.fr/color-palette-designer-skill/)** · [Download the skill](color-palette-designer.skill) · Created by [Ailive.fr](https://ailive.fr)
 
-<p align="center"><img src="screenshot.png" alt="Color Palette Lab demo: palette, conformance and state-mix toolbar above a live sample UI in the Midnight Terminal dark palette" width="100%"></p>
+<p align="center"><img src="screenshot.png" alt="Color Palette Lab demo: dark Lightroom-style slider panel, palette toolbar with Copy all, and a live sample UI with color hierarchy in the Indigo Night dark palette" width="100%"></p>
 
 ## What it does
 
@@ -17,6 +17,9 @@ A Claude skill that designs, validates and ships web color palettes. Every color
 - **Area-split presets** (60-30-10, calm 70-25-5, dense-app 80-17-3, editorial, bold-brand…) with rules A1–A7 and a DOM sampler that measures a real page.
 - **State mixes**: hover, active, disabled and tint percentages solved per palette so each step is actually visible (S1–S6), emitted as `color-mix(in oklab, …)`.
 - **15 verified palettes**: wellness/organic, dark developer, SaaS, fintech, health, e-commerce, agency.
+- **Lightroom-style color sliders** in the lab: hue, chroma, saturation, exposure (in stops) and gamma, each with a track that shows what it changes. A switch edits the background (neutrals) and the components (primary, accent, status) separately, and every slider starts from the colors of the selected preset.
+- **Component previews** that follow the palette: color hierarchy (primary, secondary, outline, tertiary), UI states (default, hover, pressed, focused, loading, disabled) and feedback states (info, warning, success, error).
+- **Copy all**: one click copies every setting, role (hex and OKLCH), contrast result, CSS variable and a share link as a prompt. Paste it in your AI and it writes the implementation instructions, no API calls.
 
 ## Install
 
@@ -56,7 +59,7 @@ node scripts/palette.mjs cvd "#3F6B4E" "#A9532F"             # color-blind separ
 
 ## The demo
 
-[`color-palette-designer-skill.html`](color-palette-designer-skill.html) is a single dependency-free file. Pick a palette, flip light/dark, edit any role color and watch the audit, state mixes and CSS update. It also has a contrast checker with a nudge-to-pass button, color-blind and grayscale previews, an HSL vs OKLCH lab, CSS and DTCG downloads, and a shareable link that stores the whole state in the URL.
+[`color-palette-designer-skill.html`](color-palette-designer-skill.html) is a single dependency-free file. Pick a palette, flip light/dark, edit any role color and watch the audit, state mixes and CSS update. It also has Lightroom-style sliders with a Background/Components switch, color hierarchy, UI-state and feedback previews, a Copy all button that exports every setting for an AI, a contrast checker with a nudge-to-pass button, color-blind and grayscale previews, an HSL vs OKLCH lab, CSS and DTCG downloads, and a shareable link that stores the whole state in the URL.
 
 ## Repository
 
@@ -64,7 +67,7 @@ node scripts/palette.mjs cvd "#3F6B4E" "#A9532F"             # color-blind separ
 |---|---|
 | `color-palette-designer/` | Skill source: `SKILL.md`, `scripts/`, `references/`, `evals/`, `assets/` |
 | `color-palette-designer.skill` | Packaged skill, ready to upload |
-| `color-palette-designer-skill.html` | Built single-file demo |
+| `color-palette-designer-skill.html` | Built single-file demo (source: `color-palette-designer/assets/demo.src.html`) |
 | `colorsys.jpg` | Social/OG image (1200×630) |
 
 ## Evidence
