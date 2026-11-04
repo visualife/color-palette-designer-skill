@@ -4,22 +4,22 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="color-scheme" content="dark">
-<title>Color &amp; Type Lab: palettes and font pairings | Ailive.fr</title>
+<title>Color &amp; Typography Lab: palettes and font pairings | Ailive.fr</title>
 <meta name="description" content="Build a contrast-solved OKLCH palette and a scored font pairing, then see both in one live UI preview. WCAG 2.2 + APCA audit, 133 pairings, copy-ready CSS.">
 <link rel="canonical" href="https://www.ailive.fr/color-palette-designer-skill/">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Ailive.fr">
-<meta property="og:title" content="Color &amp; Type Lab: one live preview for your palette and fonts">
+<meta property="og:title" content="Color &amp; Typography Lab: one live preview for your palette and fonts">
 <meta property="og:description" content="OKLCH palettes with a WCAG 2.2 + APCA audit and 133 scored font pairings, styled together on one live UI preview. Copy the CSS or hand the full spec to your AI.">
 <meta property="og:url" content="https://www.ailive.fr/color-palette-designer-skill/">
 <meta property="og:image" content="https://www.ailive.fr/color-palette-designer-skill/color-type-lab.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta property="og:image:alt" content="Color &amp; Type Lab by Ailive.fr: a live UI preview styled by a palette and a font pairing, next to the font library">
+<meta property="og:image:alt" content="Color &amp; Typography Lab by Ailive.fr: a live UI preview styled by a palette and a font pairing, next to the font library">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Color &amp; Type Lab: one live preview for your palette and fonts">
+<meta name="twitter:title" content="Color &amp; Typography Lab: one live preview for your palette and fonts">
 <meta name="twitter:description" content="OKLCH palettes with a WCAG 2.2 + APCA audit and 133 scored font pairings, styled together on one live UI preview. Copy the CSS or hand the full spec to your AI.">
-<meta name="twitter:image:alt" content="Color &amp; Type Lab by Ailive.fr: a live UI preview styled by a palette and a font pairing, next to the font library">
+<meta name="twitter:image:alt" content="Color &amp; Typography Lab by Ailive.fr: a live UI preview styled by a palette and a font pairing, next to the font library">
 <meta name="twitter:image" content="https://www.ailive.fr/color-palette-designer-skill/color-type-lab.jpg">
 <style>
 :root{
@@ -245,7 +245,7 @@ tr.edited td:first-child{box-shadow:inset 3px 0 0 var(--sh-accent)}
 .lib button[aria-current=true]{background:var(--sh-pressed)}
 .lib b{color:#8a8a8a;font-weight:400;font-size:12.5px}
 .lib .fn{display:block;margin-top:4px}
-.lib .fl{display:block;color:#f0f0f0;font-size:18px;line-height:1.35;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.lib .fl{display:block;color:#f0f0f0;font-size:18px;line-height:1.35;overflow-wrap:anywhere}
 .lib .id{font-family:var(--mono);color:#8a8a8a;font-size:11px;margin-right:6px}
 .pick{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
 .pick .field{margin:0}
@@ -335,10 +335,33 @@ details.tech-card[open]>summary{margin-bottom:12px;border-bottom:1px solid var(-
 .pv .sec .lead{font-size:15px}
 .pv .cardu h3{font-family:var(--fh,var(--sans));font-weight:var(--hw,600);letter-spacing:var(--hls,0);font-size:clamp(16px,var(--s1,17px),21px)}
 .pv .nav,.pv .foot{padding-left:clamp(22px,4cqi,48px);padding-right:clamp(22px,4cqi,48px)}
-.pv .row2{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);border-top:1px solid var(--border)}
-.pv .row2>.sec{border-top:0}
-.pv .row2>.sec+.sec{border-left:1px solid var(--border)}
-@container (max-width:780px){.pv .row2{grid-template-columns:minmax(0,1fr)}.pv .row2>.sec+.sec{border-left:0;border-top:1px solid var(--border)}}
+.pv .rowg{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,330px),1fr));gap:1px;background:var(--border);border-top:1px solid var(--border)}
+.pv .rowg>.sec{background:var(--bg);border-top:0;min-width:0}
+.pv .tg{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,340px),1fr));gap:12px clamp(22px,4cqi,48px)}
+.pv .tg>div{min-width:0}
+.pv .tg .ey{margin-bottom:6px}
+.pv .tg h4{margin:18px 0 8px;font:600 12px var(--fb,var(--sans));color:var(--text-muted);letter-spacing:var(--cap,.08em);text-transform:uppercase}
+.pv .tg .tnav{display:flex;gap:16px;flex-wrap:wrap;align-items:baseline;color:var(--text-muted);font-size:14px}
+.pv .tg .tnav b{font-family:var(--fh,var(--sans));font-weight:var(--hw,700);color:var(--text);font-size:18px}
+.pv .tg .acts{display:flex;gap:10px;flex-wrap:wrap;margin:6px 0 14px}
+.pv .tg ul{margin:0 0 12px;padding-left:1.1em}
+.pv .tg .prods{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin:8px 0}
+.pv .tg .prod{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:12px}
+.pv .tg .prod b{display:block;font-family:var(--fh,var(--sans));font-weight:var(--hw,600);letter-spacing:var(--hls,0);font-size:16px;color:var(--text)}
+.pv .tg .prod span{font-variant-numeric:tabular-nums lining-nums;color:var(--text-muted)}
+.pv .tg .codeb{display:block;background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:12px;font:13px/1.6 var(--fm,var(--mono));white-space:pre-wrap;overflow-wrap:anywhere}
+.pv .tg .in{border:1px solid var(--border-strong);background:var(--surface);color:var(--text-muted);border-radius:8px;padding:9px 11px;margin:4px 0 10px}
+.pv .tg label{display:block;font-weight:600;font-size:14px}
+.pv .tg .fnote{color:var(--text-muted);font-size:13px;margin-top:14px}
+.pv .tg h1{font-family:var(--fh,var(--sans));font-weight:var(--hw,700);letter-spacing:var(--hls,0);font-size:clamp(28px,min(var(--s4,36px),5.2cqi),64px);line-height:var(--lh3,1.1);margin:4px 0 12px;max-width:none}
+.pv .tg h1 em,.pv .tg h3 em,.pv .tg h2 em{font-family:var(--fa,var(--fh));font-weight:var(--aw,inherit);font-style:italic;color:var(--link)}
+.pv .tg .lede{font-size:var(--s1,17px);color:var(--text-muted);max-width:var(--ms,62ch);margin:0 0 14px}
+/* Preview background (type test): overrides the palette surfaces, accents stay */
+#pv[data-pvbg=light]{--bg:#fff!important;--surface:#f4f4f2!important;--surface-2:#ececea!important;--text:#1a1a1a!important;--text-muted:#5d5d5d!important;--border:#e3e3e3!important;--border-strong:#8a8a8a!important}
+#pv[data-pvbg=paper]{--bg:#f5f0e6!important;--surface:#ece5d4!important;--surface-2:#e3dbc7!important;--text:#2a2520!important;--text-muted:#6b6257!important;--border:#ddd5c4!important;--border-strong:#8f8574!important}
+#pv[data-pvbg=dark]{--bg:#14181d!important;--surface:#1b2128!important;--surface-2:#232b34!important;--text:#e4e7ea!important;--text-muted:#9aa3ab!important;--border:#2b323a!important;--border-strong:#68717a!important}
+#pv[data-pvbg=ink]{--bg:#0b0b0c!important;--surface:#151514!important;--surface-2:#1e1e1c!important;--text:#e8e2d4!important;--text-muted:#9b9586!important;--border:#2a2926!important;--border-strong:#6d695f!important}
+#pv[data-pvbg=dark],#pv[data-pvbg=ink]{letter-spacing:.008em}
 /* no stretched buttons */
 .pv .grid-states{grid-template-columns:repeat(auto-fill,minmax(118px,1fr));max-width:none}
 .pv .grid-states .b{width:auto;min-width:104px;justify-content:center}
@@ -356,9 +379,9 @@ details.tech-card[open]>summary{margin-bottom:12px;border-bottom:1px solid var(-
 .pv .spec td{border-bottom:1px solid var(--border);color:var(--text);padding:7px 10px 7px 0}
 .pv .spec .n{text-align:right}
 @container (max-width:640px){.pv .blob{width:180px;height:140px;opacity:.3;inset:auto -60px -60px auto}}
-.pv .scalebox{margin-top:26px;padding-top:18px;border-top:1px solid var(--border)}
+.pv .scalebox{margin:0;padding:0;border:0}
 .pv .scalebox h2{font-family:var(--fb,var(--sans))!important;font-size:12px!important;color:var(--text-muted)!important;font-weight:600!important}
-.pv .sc{margin:0 0 10px;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pv .sc{margin:0 0 10px;color:var(--text);overflow-wrap:anywhere}
 .pv .sc small{font:12px var(--mono);color:var(--text-muted);letter-spacing:0;margin-left:8px}
 </style>
 </head>
@@ -367,10 +390,10 @@ details.tech-card[open]>summary{margin-bottom:12px;border-bottom:1px solid var(-
 <div id="toast" role="status" aria-live="polite"></div>
 <div class="app">
 <aside id="side" aria-label="Lab controls">
-  <div class="side-head"><h1>Color &amp; Type Lab</h1><button class="icon-btn" id="side-close" type="button" aria-label="Hide controls" title="Hide controls"><svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M8.5 3 4.5 7l4 4M12 3 8 7l4 4"/></svg></button></div>
+  <div class="side-head"><h1>Color &amp; Typography Lab</h1><button class="icon-btn" id="side-close" type="button" aria-label="Hide controls" title="Hide controls"><svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M8.5 3 4.5 7l4 4M12 3 8 7l4 4"/></svg></button></div>
   <p class="note" style="margin:4px 0 0">One live preview for your palette and your font pairing. Switch panels to tune each.</p>
   <div class="modesw" role="group" aria-label="Lab panel"><button type="button" data-mode="color" aria-pressed="true">Color</button><button type="button" data-mode="type" aria-pressed="false">Typography</button></div>
-  <div class="only-color">
+  <div class="only-color"><p class="note">Live demo of the color-palette-designer skill. Every number below is computed in your browser by the same engine as <code>scripts/palette.mjs</code>.</p>
 
   <div class="field"><span class="lbl">Theme</span>
     <div class="seg" id="seg-mode"><button data-v="light" aria-pressed="true">Light</button><button data-v="dark" aria-pressed="false">Dark</button></div>
@@ -403,6 +426,7 @@ details.tech-card[open]>summary{margin-bottom:12px;border-bottom:1px solid var(-
 
   <button class="btn copyside" id="copy-color" type="button" title="Copy every color setting as a prompt for your AI">Copy all color settings</button></div>
   <div class="only-type">
+  <p class="note">Scored pairings. Google Fonts and Fontshare. Pick a pairing, then tune.</p>
   <div class="field"><span class="lbl">Register</span><div class="seg" id="reg"></div></div>
   <div class="field"><label class="lbl" for="q">Search use, mood or font</label><input id="q" type="search" placeholder="spa, bank, Fraunces…" autocomplete="off"></div>
   <div class="field"><span class="lbl">Library <span id="cnt"></span></span><div class="lib" id="lib" role="list"></div></div>
@@ -410,6 +434,7 @@ details.tech-card[open]>summary{margin-bottom:12px;border-bottom:1px solid var(-
   <label class="chk"><input type="checkbox" id="neutral"> Neutral brief (accept overused)</label>
 
   <div class="field"><span class="lbl">Language</span><div class="seg" id="lang"></div></div>
+  <div class="field"><span class="lbl">Preview background</span><div class="seg" id="bg"></div></div>
 
   <div class="field"><div class="row"><span>Base size</span><output id="o-base"></output></div><input type="range" class="lr" id="base" min="14" max="22" step="0.5" value="17"></div>
   <div class="field"><span class="lbl">Scale ratio</span><select id="ratio"></select></div>
@@ -420,7 +445,7 @@ details.tech-card[open]>summary{margin-bottom:12px;border-bottom:1px solid var(-
 
   <div class="field seg"><button class="btn" id="shuffle" type="button">Shuffle in register</button><button class="btn" id="share" type="button">Copy link</button></div>
   <button class="btn copyside" id="copy-type" type="button" title="Copy every typography setting as a prompt for your AI">Copy all typography settings</button></div>
-  <p class="credit side-foot">Engines <code>scripts/palette.mjs</code> and <code>scripts/lib.mjs</code>, run in your browser. Created by <a href="https://www.ailive.fr" target="_blank" rel="noopener">Ailive.fr</a></p>
+  <p class="credit side-foot">Engine <code>scripts/lib.mjs</code> · data <code>references/*.json</code><br>Created by <a href="https://www.ailive.fr" target="_blank" rel="noopener">Ailive.fr</a></p>
 </aside>
 <div class="grip" role="separator" aria-orientation="vertical" aria-label="Resize controls" aria-valuemin="280" aria-valuemax="620" tabindex="0" title="Drag to resize, double-click to reset"></div>
 <button class="side-open" id="side-open" type="button" hidden aria-label="Show controls"><svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M5.5 3l4 4-4 4M2 3l4 4-4 4"/></svg><span>Controls</span></button>
@@ -464,16 +489,12 @@ details.tech-card[open]>summary{margin-bottom:12px;border-bottom:1px solid var(-
         <div class="cardu"><span class="tag">New</span><h3>Layered surfaces</h3><p>Elevation comes from lightness steps, not shadows alone.</p></div>
         <div class="cardu"><span class="tag">Muted text</span><h3>Secondary copy</h3><p>Muted text still reaches 4.5:1 on every surface it sits on.</p></div>
         <div class="cardu"><button class="b b-a" style="margin-bottom:8px">Accent fill</button><p>Accent as a fill with its own on-accent text color.</p></div></div></div>
-      <div class="row2">
-        <div class="sec spec"><h2>Typography</h2><div id="tspec"></div></div>
-        <div class="sec"><h2>Chart colors</h2>
-          <div class="bars" id="bars"></div><div class="legend" id="legend"></div><div class="scalebox"><h2>Type scale</h2><div class="sc" style="font-size:clamp(28px,var(--s4,32px),52px);font-family:var(--fh);font-weight:var(--hw);letter-spacing:var(--hls);line-height:1.1">Display <small>s4</small></div><div class="sc" style="font-size:clamp(22px,var(--s3,26px),40px);font-family:var(--fh);font-weight:var(--hw);letter-spacing:var(--hls);line-height:1.15">Heading <small>s3</small></div><div class="sc" style="font-size:clamp(18px,var(--s2,20px),30px);font-family:var(--fh);font-weight:var(--hw);letter-spacing:var(--hls)">Subheading <small>s2</small></div><div class="sc" style="font-size:var(--s1,17px)">Lead paragraph in the body face <small>s1</small></div><div class="sc" style="font-size:var(--s0,16px)">Body text at its working size <small>s0</small></div><div class="sc" style="font-size:var(--sn1,13px);color:var(--text-muted)">Caption and small print <small>s-1</small></div></div></div></div>
-      <div class="sec"><h2>Color hierarchy</h2>
-        <p class="lead" style="margin:0 0 14px;max-width:520px">Color communicates importance and state, not decoration. Primary uses the highest contrast; only one per view.</p>
-        <div class="hier-wrap"><div class="hier" id="hier"></div></div></div>
-      <div class="row2">
-        <div class="sec"><h2>UI states</h2>
-          <p class="lead" style="margin:0 0 14px;max-width:520px">Colors that communicate interaction: what happens when someone touches or uses something. Hover, press and tab to the real ones.</p>
+      <div class="sec spec"><h2>Typography</h2><div class="tg" id="tspec"></div></div>
+      <div class="rowg">
+        <div class="sec"><h2>Chart with Okabe-Ito categorical set (direct labels)</h2>
+          <div class="bars" id="bars"></div><div class="legend" id="legend"></div></div>
+        <div class="sec"><h2>Color in UI states (hover, press and tab to the real ones)</h2>
+          <p class="lead" style="margin:0 0 14px;max-width:520px">Colors that communicate interaction: what happens when someone touches or uses something.</p>
           <div class="grid-states">
           <div><small>Default</small><button class="b b-p">Submit</button></div>
           <div><small id="sm-h">Hover</small><button class="b b-p is-hover">Submit</button></div>
@@ -481,7 +502,12 @@ details.tech-card[open]>summary{margin-bottom:12px;border-bottom:1px solid var(-
           <div><small>Focused: 2px ring</small><button class="b b-p is-focus">Submit</button></div>
           <div><small>Loading</small><button class="b b-p is-loading" aria-busy="true"><span class="spin" aria-hidden="true"></span>Loading…</button></div>
           <div><small id="sm-d">Disabled</small><button class="b b-p" disabled>Submit</button></div></div></div>
-        <div class="sec"><h2>Interactive components</h2>
+        <div class="sec"><div class="scalebox"><h2>Type scale</h2><div class="sc" style="font-size:clamp(28px,var(--s4,32px),52px);font-family:var(--fh);font-weight:var(--hw);letter-spacing:var(--hls);line-height:1.1">Display <small>s4</small></div><div class="sc" style="font-size:clamp(22px,var(--s3,26px),40px);font-family:var(--fh);font-weight:var(--hw);letter-spacing:var(--hls);line-height:1.15">Heading <small>s3</small></div><div class="sc" style="font-size:clamp(18px,var(--s2,20px),30px);font-family:var(--fh);font-weight:var(--hw);letter-spacing:var(--hls)">Subheading <small>s2</small></div><div class="sc" style="font-size:var(--s1,17px)">Lead paragraph in the body face <small>s1</small></div><div class="sc" style="font-size:var(--s0,16px)">Body text at its working size <small>s0</small></div><div class="sc" style="font-size:var(--sn1,13px);color:var(--text-muted)">Caption and small print <small>s-1</small></div></div></div></div>
+      <div class="sec"><h2>Color hierarchy</h2>
+        <p class="lead" style="margin:0 0 14px;max-width:520px">Color communicates importance and state, not decoration. Primary uses the highest contrast; only one per view.</p>
+        <div class="hier-wrap"><div class="hier" id="hier"></div></div></div>
+      <div class="rowg">
+        <div class="sec"><h2>Interactive components (selected states use the solved tint)</h2>
           <div class="tgl-row"><button class="tgl" id="tgl" role="switch" aria-checked="false" aria-labelledby="tgl-l"><span class="k"></span></button><span id="tgl-l">Email me restock alerts: <b id="tgl-s">off</b></span></div>
           <div class="tabs" role="tablist" id="tabs">
             <button role="tab" aria-selected="true" data-p="Overview: light, calm, one action hue.">Overview</button>
@@ -491,13 +517,12 @@ details.tech-card[open]>summary{margin-bottom:12px;border-bottom:1px solid var(-
           <div class="opts" role="radiogroup" aria-label="Delivery" id="opts">
             <button role="radio" aria-checked="true" tabindex="0"><span>Standard delivery, 3 days</span><span class="ck" aria-hidden="true">&#10003;</span></button>
             <button role="radio" aria-checked="false" tabindex="-1"><span>Express, next day</span><span class="ck" aria-hidden="true">&#10003;</span></button>
-            <button role="radio" aria-checked="false" tabindex="-1"><span>Pick up in store</span><span class="ck" aria-hidden="true">&#10003;</span></button></div></div></div>
-      <div class="row2">
-        <div class="sec"><h2>Form validation</h2>
+            <button role="radio" aria-checked="false" tabindex="-1"><span>Pick up in store</span><span class="ck" aria-hidden="true">&#10003;</span></button></div></div>
+        <div class="sec"><h2>Form with live validation (icon + text, not color alone)</h2>
           <label class="f" for="e1">Email (type to validate)</label><input class="inp err" id="e1" value="hello@" aria-invalid="true" aria-describedby="e1m" autocomplete="off">
           <div id="e1m" aria-live="polite"></div>
           <div style="height:12px"></div><label class="f" for="e2">Postcode</label><input class="inp" id="e2" value="75017"><div class="help">Border uses border-strong (3:1), not the decorative border.</div></div>
-        <div class="sec"><h2><span>Feedback states</span><button class="b b-g" id="restore" style="padding:2px 8px;font-size:12px" hidden>Restore all</button></h2><div class="alerts" id="alerts">
+        <div class="sec"><h2><span>Color in feedback states (dismissible)</span><button class="b b-g" id="restore" style="padding:2px 8px;font-size:12px" hidden>Restore all</button></h2><div class="alerts" id="alerts">
           <div class="al i"><svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path d="M8 1a7 7 0 1 0 0 14A7 7 0 0 0 8 1Zm-.75 3h1.5v1.5h-1.5V4Zm0 3h1.5v5h-1.5V7Z"/></svg><span><b>Info.</b> Free shipping over 60.</span><button class="xbtn" aria-label="Dismiss">&times;</button></div>
           <div class="al w"><svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path d="M8 1 15 14H1L8 1Zm-.75 5v4h1.5V6h-1.5Zm0 5v1.5h1.5V11h-1.5Z"/></svg><span><b>Warning.</b> Stock is running low.</span><button class="xbtn" aria-label="Dismiss">&times;</button></div>
           <div class="al s"><svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path d="M8 1a7 7 0 1 0 0 14A7 7 0 0 0 8 1Zm-1 10L4 8l1-1 2 2 4-4 1 1-5 5Z"/></svg><span><b>Success.</b> Order confirmed.</span><button class="xbtn" aria-label="Dismiss">&times;</button></div>
@@ -586,7 +611,7 @@ details.tech-card[open]>summary{margin-bottom:12px;border-bottom:1px solid var(-
   </details>
 
   <details class="card tech-card">
-    <summary><h2>Type rules</h2></summary>
+    <summary><h2>Rules</h2></summary>
     <table id="rules"><thead><tr><th>Rule</th><th>Statement</th></tr></thead><tbody></tbody></table>
   </details>
   </div>
@@ -1596,7 +1621,7 @@ $('copy-all').addEventListener('click',async()=>{
     roles:Object.fromEntries(Object.entries(c.roles).map(([k,v])=>[k,{hex:v,oklch:oklchOf(v)}])),
     contrast:audit(c.roles,{aaa:state.conf==='AAA'}).map(r=>({pair:r.fg+' on '+r.bg,ratio:+r.ratio.toFixed(2),need:r.need,pass:r.pass}))
   };
-  const text=`I designed a UI color palette${window.__noType?"":" and a font pairing"} in the Color & Type Lab (Ailive.fr). Use the settings below to write clear, step-by-step instructions for implementing it in my project: CSS custom properties, light/dark handling, button hierarchy (primary, secondary, outline, tertiary), UI states (hover, pressed, focus, loading, disabled) and feedback colors (info, warning, success, error). Keep every hex value exactly as given and flag any contrast pair that fails.
+  const text=`I designed a UI color palette${window.__noType?"":" and a font pairing"} in the Color & Typography Lab (Ailive.fr). Use the settings below to write clear, step-by-step instructions for implementing it in my project: CSS custom properties, light/dark handling, button hierarchy (primary, secondary, outline, tertiary), UI states (hover, pressed, focus, loading, disabled) and feedback colors (info, warning, success, error). Keep every hex value exactly as given and flag any contrast pair that fails.
 
 ## Settings (JSON)
 ${JSON.stringify(settings,null,2)}
@@ -1958,10 +1983,10 @@ const SAMPLE = {
     q: `${'«'}${NB}La retenue est une forme d’assurance.${NB}${'»'}`, list: ['Une vedette, un serviteur', 'Deux graisses, pas plus', 'L’interlettrage fait le luxe'], h3: 'À la une', side: 'Un texte court sous un intertitre, dans la police de texte. Vérifiez que le gras et l’italique appartiennent à la même famille.',
     prod: [['Plaid en lin, 120 × 180', '148,00 €'], ['Carafe en céramique', '64,50 €'], ['Bougie de cire d’abeille, lot de 3', '39,00 €']], thead: ['Article', 'Qté', 'Prix'], rows: [['Plaid en lin', '2', '296,00'], ['Carafe en céramique', '1', '64,50'], ['Lot de bougies', '4', '156,00']], code: '.hero h1 {\n  font: var(--hw) var(--step-5)/1.05 var(--font-heading);\n  letter-spacing: -0.02em;\n}', form: ['E-mail', 'Message', 'Envoyer'], gl: 'Glyphes : À É È Ê Ç Œ Ÿ « » œ ç é ù — 1 234,50 €', foot: '© 2026 Maison Aurèle · Paris' }
 };
-const BGS = [['light', 'Light'], ['paper', 'Paper'], ['dark', 'Dark'], ['ink', 'Ink']];
+const BGS = [['pal', 'Palette'], ['light', 'Light'], ['paper', 'Paper'], ['dark', 'Dark'], ['ink', 'Ink']];
 const RATIOS = [[1.125, 'Major second 1.125'], [1.2, 'Minor third 1.2'], [1.25, 'Major third 1.25'], [1.333, 'Perfect fourth 1.333'], [1.414, 'Aug. fourth 1.414'], [1.5, 'Perfect fifth 1.5'], [1.618, 'Golden 1.618']];
 const REGS = ['all', 'luxury', 'quiet luxury', 'classic', 'modern', 'product', 'editorial', 'natural', 'trust', 'creative', 'loud', 'general'];
-const S = { reg: 'all', q: '', lang: 'en', bg: 'light', fs: false, neutral: false, tab: 'google', cur: null,
+const S = { reg: 'all', q: '', lang: 'en', bg: 'pal', fs: false, neutral: false, tab: 'google', cur: null,
   h: ['Bodoni Moda', 400], b: ['Hanken Grotesk', 400], m: '', a: '', base: 17, ratio: 1.5, lh: 1.65, ls: -0.01, ms: 62, cap: 0.16 };
 
 // ----- controls
@@ -1971,6 +1996,7 @@ function seg(id, items, key, onpick) {
 }
 seg('reg', REGS.map((r) => [r, r === 'all' ? 'All' : r[0].toUpperCase() + r.slice(1)]), 'reg', renderLib);
 seg('lang', [['en', 'EN'], ['fr', 'FR']], 'lang');
+seg('bg', BGS, 'bg');
 $('ratio').innerHTML = RATIOS.map(([v, l]) => `<option value="${v}">${l}</option>`).join('');
 $('ratio').onchange = () => { S.ratio = +$('ratio').value; render(); };
 ['base', 'lh', 'ls', 'ms', 'cap'].forEach((k) => ($(k).oninput = () => { S[k] = +$(k).value; render(); }));
@@ -2023,7 +2049,7 @@ function syncControls() {
   $('mf').value = S.m; $('af').value = S.a; $('ratio').value = S.ratio;
   ['base', 'lh', 'ls', 'ms', 'cap'].forEach((k) => ($(k).value = S[k]));
   $('fs').checked = S.fs; $('neutral').checked = S.neutral; $('q').value = S.q;
-  for (const [id, key] of [['reg', 'reg'], ['lang', 'lang']]) [...$(id).children].forEach((b, i) => { const vals = id === 'reg' ? REGS : id === 'lang' ? ['en', 'fr'] : BGS.map((x) => x[0]); b.setAttribute('aria-pressed', vals[i] === S[key]); });
+  for (const [id, key] of [['reg', 'reg'], ['lang', 'lang'], ['bg', 'bg']]) [...$(id).children].forEach((b, i) => { const vals = id === 'reg' ? REGS : id === 'lang' ? ['en', 'fr'] : BGS.map((x) => x[0]); b.setAttribute('aria-pressed', vals[i] === S[key]); });
 }
 $('shuffle').onclick = () => { const l = visible(); if (l.length) pickPairing(l[Math.floor(Math.random() * l.length)].id); };
 $('copy-all-t').onclick = () => $('copy-all').click();
@@ -2082,7 +2108,7 @@ function outs() { const o = { base: S.base + 'px', lh: (+S.lh).toFixed(2), ls: (
   const h = getFont(S.h[0]), b = getFont(S.b[0]); if (!h || !b) return;
   const m = S.m ? getFont(S.m) : null, a = S.a ? getFont(S.a) : null, T = SAMPLE[S.lang];
   const { st, v } = stepsVars();
-  const pv = $('pv');
+  const pv = $('pv'); pv.dataset.pvbg = S.bg;
   Object.entries(v).forEach(([k, x]) => pv.style.setProperty(k, x));
   const fb = [h, b, m, a].filter(Boolean).map((f) => fallbackFace(f.name)).filter(Boolean);
   let fs = $('fbstyle'); if (!fs) { fs = document.createElement('style'); fs.id = 'fbstyle'; document.head.appendChild(fs); } fs.textContent = fb.map((x) => x.css).join('\n');
@@ -2093,7 +2119,7 @@ function outs() { const o = { base: S.base + 'px', lh: (+S.lh).toFixed(2), ls: (
   pv.style.setProperty('--lhb', S.lh); pv.style.setProperty('--lh1', lineHeightFor(S.base * Math.pow(S.ratio, 5)));
   pv.style.setProperty('--lh3', lineHeightFor(S.base * Math.pow(S.ratio, 3)));
   const itH = a || h.italic ? '' : 'font-style:normal';
-  $('tspec').innerHTML = `<div class="ey">${T.eyebrow}</div><h3>${T.h2}</h3><p>${T.p[0]}</p><blockquote>${T.q}</blockquote><table><thead><tr><th>${T.thead[0]}</th><th class="n">${T.thead[1]}</th><th class="n">${T.thead[2]}</th></tr></thead><tbody>${T.rows.map((r) => `<tr><td>${r[0]}</td><td class="n">${r[1]}</td><td class="n">${r[2]}</td></tr>`).join('')}</tbody></table>`;
+  $('tspec').innerHTML = `<div><div class="tnav"><b>Aurèle</b>${T.nav.map((n) => `<span>${n}</span>`).join('')}</div><h4>${T.eyebrow}</h4><h1 style="${itH}">${T.h1}</h1><p class="lede">${T.lede}</p><div class="acts"><span class="b b-p">${T.c1}</span><span class="b b-s">${T.c2}</span></div><h3>${T.h2}</h3>${T.p.map((x) => `<p>${x}</p>`).join('')}<blockquote>${T.q}</blockquote><ul>${T.list.map((x) => `<li>${x}</li>`).join('')}</ul></div><div><h3>${T.h3}</h3><p>${T.side}</p><p>${T.gl}</p><div class="prods">${T.prod.map((p) => `<div class="prod"><b>${p[0]}</b><span>${p[1]}</span></div>`).join('')}</div><table><thead><tr><th>${T.thead[0]}</th><th class="n">${T.thead[1]}</th><th class="n">${T.thead[2]}</th></tr></thead><tbody>${T.rows.map((r) => `<tr><td>${r[0]}</td><td class="n">${r[1]}</td><td class="n">${r[2]}</td></tr>`).join('')}</tbody></table><h4>CSS</h4><span class="codeb">${esc(T.code)}</span><h4>${T.form[0]}</h4><div class="in">name@maison.fr</div><label>${T.form[1]}</label><div class="in" style="min-height:54px"> </div><span class="b b-p">${T.form[2]}</span><p class="fnote">${T.foot}</p></div>`;
   $('pvnote').textContent = `${h.name} ${S.h[1]} / ${b.name} ${S.b[1]}${m ? ' / ' + m.name : ''}`;
 
   // check
@@ -2130,7 +2156,7 @@ $('dl').onclick = () => { const a = document.createElement('a'); a.href = URL.cr
 
 // ----- hash state
 function hashSave() {
-  const p = new URLSearchParams({ h: S.h.join(':'), b: S.b.join(':'), lang: S.lang, base: S.base, ratio: S.ratio, lh: S.lh, ls: S.ls, ms: S.ms, cap: S.cap });
+  const p = new URLSearchParams({ h: S.h.join(':'), b: S.b.join(':'), lang: S.lang, bg: S.bg, base: S.base, ratio: S.ratio, lh: S.lh, ls: S.ls, ms: S.ms, cap: S.cap });
   if (S.m) p.set('m', S.m); if (S.a) p.set('a', S.a); if (S.cur) p.set('p', S.cur);
   try { const all = new URLSearchParams(location.hash.slice(1)); all.set('t', p.toString()); history.replaceState(null, '', '#' + all.toString()); } catch (e) {}
 }
@@ -2146,7 +2172,7 @@ if (!hashLoad()) { S.cur = 'P18'; S.ratio = 1.25; S.ls = -0.02; S.cap = 0.12; S.
 syncControls(); renderLib(); render();
 
 $('copy-type').onclick = async () => {
-  const text = `I chose a font pairing in the Color & Type Lab (Ailive.fr). Use the settings below to write clear, step-by-step instructions for implementing this typography in my project: font loading (Google link or self-host), CSS custom properties, type scale, fallbacks and usage rules.
+  const text = `I chose a font pairing in the Color & Typography Lab (Ailive.fr). Use the settings below to write clear, step-by-step instructions for implementing this typography in my project: font loading (Google link or self-host), CSS custom properties, type scale, fallbacks and usage rules.
 
 ${window.__typeSpec()}
 ## Link to this exact state
