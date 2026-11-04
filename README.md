@@ -2,11 +2,13 @@
 
 # Color Palette Designer
 
-A Claude skill that designs, validates and ships web color palettes. Every color is a **role** (bg, surface, text, primary, accent, semantic…), generated in **OKLCH**, solved on **lightness only** until it passes **WCAG 2.2**, then checked for APCA, color-blindness, dark-mode rules, area splits and interaction states. Output is copy-ready CSS variables, Tailwind v4 `@theme` or DTCG tokens.
+A Claude skill that designs, validates and ships web color palettes, plus a live **Color & Typography Lab** that pairs them with scored font pairings on one shared preview. Every color is a **role** (bg, surface, text, primary, accent, semantic…), generated in **OKLCH**, solved on **lightness only** until it passes **WCAG 2.2**, then checked for APCA, color-blindness, dark-mode rules, area splits and interaction states. Output is copy-ready CSS variables, Tailwind v4 `@theme` or DTCG tokens.
 
 **[Live demo](https://www.ailive.fr/color-palette-designer-skill/)** · [Download the skill](color-palette-designer.skill) · Created by [Ailive.fr](https://ailive.fr)
 
-<p align="center"><img src="screenshot.png" alt="Color Palette Lab demo: dark Lightroom-style slider panel, palette toolbar with Copy all, and a live sample UI with color hierarchy in the Indigo Night dark palette" width="100%"></p>
+<p align="center"><img src="screenshot.png" alt="Color & Typography Lab, Color tab: dark Lightroom-style slider panel, palette toolbar with Copy all, and a live sample UI in the Indigo Night dark palette" width="100%"></p>
+
+<p align="center"><img src="screenshot-typography.png" alt="Color & Typography Lab, Typography tab: pairing pickers with a score, a library shown in the real fonts, and the same live preview set in Fraunces and DM Sans on a paper background" width="100%"></p>
 
 ## What it does
 
@@ -19,7 +21,9 @@ A Claude skill that designs, validates and ships web color palettes. Every color
 - **15 verified palettes**: wellness/organic, dark developer, SaaS, fintech, health, e-commerce, agency.
 - **Lightroom-style color sliders** in the lab: hue, chroma, saturation, exposure (in stops) and gamma, each with a track that shows what it changes. A switch edits the background (neutrals) and the components (primary, accent, status) separately, and every slider starts from the colors of the selected preset.
 - **Component previews** that follow the palette: color hierarchy (primary, secondary, outline, tertiary), UI states (default, hover, pressed, focused, loading, disabled) and feedback states (info, warning, success, error).
-- **Copy all**: one click copies every setting, role (hex and OKLCH), contrast result, CSS variable and a share link as a prompt. Paste it in your AI and it writes the implementation instructions, no API calls.
+- **Font pairings** in the same lab: a library of scored pairings (Google Fonts, optional Fontshare) shown in their real fonts, a 9-point pairing check (license, x-height, width, contrast, weights, byte budget), scale ratio, line-height, tracking and measure controls, metric-matched fallbacks, and copy-ready CSS (Google link, self-host, tokens, Tailwind v4). A preview background switch (Palette, Light, Paper, Dark, Ink) tests the fonts on different surfaces.
+- **One preview**: the palette sets the colors and the pairing sets the typography of the same sample UI. Switch between the **Color** and **Typography** tabs, drag or close the left menu, and technical tables stay folded until you open them.
+- **Copy all**: one click copies every setting, role (hex and OKLCH), contrast result, CSS variable and a share link as a prompt. Each tab also has its own copy button (all color settings, all typography settings). Paste it in your AI and it writes the implementation instructions, no API calls.
 
 ## Install
 
@@ -59,7 +63,7 @@ node scripts/palette.mjs cvd "#3F6B4E" "#A9532F"             # color-blind separ
 
 ## The demo
 
-[`color-palette-designer-skill.html`](color-palette-designer-skill.html) is a single dependency-free file. Pick a palette, flip light/dark, edit any role color and watch the audit, state mixes and CSS update. It also has Lightroom-style sliders with a Background/Components switch, color hierarchy, UI-state and feedback previews, a Copy all button that exports every setting for an AI, a contrast checker with a nudge-to-pass button, color-blind and grayscale previews, an HSL vs OKLCH lab, CSS and DTCG downloads, and a shareable link that stores the whole state in the URL.
+[`color-palette-designer-skill.html`](color-palette-designer-skill.html) is a single dependency-free file (the Color & Typography Lab). Pick a palette, flip light/dark, edit any role color and watch the audit, state mixes and CSS update. It also has Lightroom-style sliders with a Background/Components switch, color hierarchy, UI-state and feedback previews, a Copy all button that exports every setting for an AI, a contrast checker with a nudge-to-pass button, color-blind and grayscale previews, an HSL vs OKLCH lab, CSS and DTCG downloads, a Typography tab with the font library, pairing check and CSS output, and a shareable link that stores the whole state in the URL.
 
 ## Repository
 
@@ -67,8 +71,10 @@ node scripts/palette.mjs cvd "#3F6B4E" "#A9532F"             # color-blind separ
 |---|---|
 | `color-palette-designer/` | Skill source: `SKILL.md`, `scripts/`, `references/`, `evals/`, `assets/` |
 | `color-palette-designer.skill` | Packaged skill, ready to upload |
-| `color-palette-designer-skill.html` | Built single-file demo (source: `color-palette-designer/assets/demo.src.html`) |
-| `colorsys.jpg` | Social/OG image (1200×630) |
+| `color-palette-designer-skill.html` | Built single-file Color & Typography Lab (source: `color-palette-designer/assets/demo.src.html`, build: `node color-palette-designer/scripts/build_demo.mjs --out color-palette-designer-skill.html`) |
+| `color-type-lab.jpg` | Social/OG image of the lab (1200×630) |
+| `colorsys.jpg` | Previous OG image (1200×630) |
+| `screenshot.png`, `screenshot-typography.png` | README screenshots of the Color and Typography tabs |
 
 ## Evidence
 
